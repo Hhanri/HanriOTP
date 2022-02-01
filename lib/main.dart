@@ -29,10 +29,18 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+String getOTPCode(){
+  return OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
+}
+
+int getRemainingTime() {
+  return 30 - (DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond)%30;
+}
 class _MyHomePageState extends State<MyHomePage> {
+
   Timer? timer;
-  int remainingTime = 0;
-  String code = "";
+  int remainingTime = getRemainingTime();
+  String code = getOTPCode();
   @override
   void initState() {
     code = OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
@@ -47,8 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void getCurrentTimer() {
     setState(() {
-      code = OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
-      remainingTime = OTP.remainingSeconds(interval: 30);
+      code = getOTPCode();
+      remainingTime = getRemainingTime();
+      print(remainingTime);
     });
   }
 
@@ -63,9 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(remainingTime.toString()),
             TextButton(
               onPressed: () {
-                String tempCode = OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
-                //print(tempCode);
-                //print(OTP.remainingSeconds(interval: 30));
+                String tempCode = getOTPCode();
                 setState(() {
                   code = tempCode;
                 });
