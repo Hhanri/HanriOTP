@@ -55,9 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void getCurrentTimer() {
     setState(() {
-      code = getOTPCode();
       remainingTime = getRemainingTime();
       print(remainingTime);
+      if (remainingTime == 30) {
+        code = getOTPCode();
+      }
     });
   }
 
