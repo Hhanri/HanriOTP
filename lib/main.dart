@@ -30,26 +30,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  final Stream<int> _myStream = Stream.periodic(const Duration(seconds: 1), (int i) {
-    return OTP.remainingSeconds(interval: 30);
-  });
-
-  late StreamSubscription _sub;
-
-  int remainingTime = 30;
-
+  Timer? timer;
+  int remainingTime = 0;
   String code = "";
   @override
   void initState() {
-    _sub = _myStream.listen((event) {
-      setState(() {
-        remainingTime = event;
-      });
-    });
     code = OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
+    remainingTime = OTP.remainingSeconds(interval: 30);
     super.initState();
+    startTimer();
   }
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      getCurrentTimer();
+    });
+  }
+  void getCurrentTimer() {
+    setState(() {
+      code = OTP.generateTOTPCodeString("JBSWY3DPEHPK3PXP", DateTime.now().millisecondsSinceEpoch, algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
+      remainingTime = OTP.remainingSeconds(interval: 30);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
