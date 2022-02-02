@@ -7,4 +7,5 @@ class Ticker {
   static int getRemainingTime() {
     return 30 - (DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond)%30;
   }
+
 }

@@ -5,14 +5,16 @@ abstract class TimerEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
 class Start extends TimerEvent {
   final int duration;
   const Start({required this.duration});
+}
 
+class Refresh extends TimerEvent {
 }
 
 class Tick extends TimerEvent {
   final int duration;
   const Tick({required this.duration});
-  ;
 }
