@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:otp_generator/pages/home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/ticker.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
       child: MyApp()
