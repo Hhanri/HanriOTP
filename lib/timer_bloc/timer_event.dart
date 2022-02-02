@@ -7,8 +7,7 @@ abstract class TimerEvent extends Equatable {
 }
 
 class Start extends TimerEvent {
-  final int duration;
-  const Start({required this.duration});
+  const Start();
 }
 
 class Refresh extends TimerEvent {

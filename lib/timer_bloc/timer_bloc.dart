@@ -38,8 +38,14 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     });
 
     on<Tick>((event, emit) async {
-      duration = state.duration;
+      duration = Ticker.getRemainingTime();
     });
-    add(Start(duration: duration));
+    add(Start());
+
+    @override
+    Future<void> close() {
+      _tickerSubscription?.cancel();
+      return super.close();
+    }
   }
 }
