@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otp_generator/providers/code_notifier.dart';
+import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
 
 class ListViewWidget extends StatelessWidget {
@@ -17,10 +17,11 @@ class ListViewWidget extends StatelessWidget {
         final shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft < 11));
         final List<SeedModel> seeds = ref.watch(seedsProvider);
         List<String> codes = SeedModel.getListCodes(seeds);
-        return ListView.builder(
+        return ReorderableListView.builder(
           physics: const ClampingScrollPhysics() ,
           itemBuilder: (BuildContext context, int index) {
             return CodeCardWidget(
+              key: Key(seeds[index].title + seeds[index].seed),
               code: codes[index],
               index: index,
               seed: seeds[index],
@@ -28,6 +29,9 @@ class ListViewWidget extends StatelessWidget {
             );
           },
           itemCount: seeds.length,
+          onReorder: (int oldIndex, int newIndex) {
+            ref.watch(seedsProvider.notifier).swapSeeds(oldIndex, newIndex, seeds[oldIndex]);
+          },
         );
       },
     );
