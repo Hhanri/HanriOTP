@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/pages/home_page.dart';
-import 'package:otp_generator/ticker.dart';
+import 'package:otp_generator/providers/providers.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +42,3 @@ class _MyAppState extends ConsumerState<MyApp> {
     );
   }
 }
-
-final timerProvider = StateNotifierProvider<TimerNotifier, TimerModel>(
-  (ref) => TimerNotifier()
-);

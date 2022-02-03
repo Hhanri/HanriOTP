@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otp_generator/code_service.dart';
-import 'package:otp_generator/main.dart';
+import 'package:otp_generator/providers/code_notifier.dart';
+import 'package:otp_generator/providers/providers.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,13 +37,13 @@ class CodeTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("code was rebuilt");
-    String code = CodeService.getCode(seed);
+    String code = CodeModel.getCode(seed);
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         int timeLeft = ref.watch(timerProvider).timeLeft;
         print('code consumer rebuilt');
         if (timeLeft == 30) {
-          code = CodeService.getCode(seed);
+          code = CodeModel.getCode(seed);
         }
         return Text(code);
       },
