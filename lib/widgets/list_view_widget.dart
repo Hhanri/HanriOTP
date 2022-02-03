@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/providers/code_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
@@ -17,6 +18,7 @@ class ListViewWidget extends StatelessWidget {
         final List<SeedModel> seeds = ref.watch(seedsProvider);
         List<String> codes = SeedModel.getListCodes(seeds);
         return ListView.builder(
+          physics: const ClampingScrollPhysics() ,
           itemBuilder: (BuildContext context, int index) {
             return CodeCardWidget(
               code: codes[index],
@@ -56,6 +58,54 @@ class CodeCardWidget extends StatelessWidget{
         ),
       ),
       subtitle: Text(seed.title),
+      trailing: FittedBox(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CopyButtonWidget(code: code),
+            MoreButtonWidget(seed: seed, index: index)
+          ],
+        ),
+      )
+    );
+  }
+}
+
+class CopyButtonWidget extends StatelessWidget {
+  final String code;
+  const CopyButtonWidget({
+    Key? key,
+    required this.code
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: (){
+        Clipboard.setData(ClipboardData(text: code));
+      },
+      icon: const Icon(Icons.copy),
+      tooltip: 'Copy to clipboard',
+    );
+  }
+}
+
+class MoreButtonWidget extends StatelessWidget {
+  final SeedModel seed;
+  final int index;
+  const MoreButtonWidget({
+    Key? key,
+    required this.seed,
+    required this.index
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {  },
+      icon: const Icon(Icons.more_vert),
+      tooltip: 'More',
     );
   }
 }

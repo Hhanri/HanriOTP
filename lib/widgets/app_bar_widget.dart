@@ -14,6 +14,7 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
       children: [
         AppBar(
           title: const Text("OTP Generator"),
+          elevation: 0,
         ),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
