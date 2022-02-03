@@ -1,16 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
 
-class CodeNotifier extends StateNotifier<List<CodeModel>> {
-  CodeNotifier() : super(_initialState);
+class SeedsNotifier extends StateNotifier<List<SeedModel>> {
+  SeedsNotifier() : super(_initialState);
 
-  static final List<CodeModel> _initialState = //loadSavedSeeds
+  static final List<SeedModel> _initialState = //loadSavedSeeds
     [
-      CodeModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
-      CodeModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 2")
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 2")
     ];
 
-  void addSeed(CodeModel newSeed) {
+  void addSeed(SeedModel newSeed) {
     state.add(newSeed);
     //saveSeeds
   }
@@ -22,18 +30,18 @@ class CodeNotifier extends StateNotifier<List<CodeModel>> {
 
 }
 
-class CodeModel {
+class SeedModel {
   final String seed;
   final String title;
-  CodeModel({required this.seed, required this.title});
+  SeedModel({required this.seed, required this.title});
 
-  static Map<String, String>toMap(CodeModel codeModel) => {
-    "seed": codeModel.seed,
-    "title": codeModel.title
+  static Map<String, String>toMap(SeedModel seedModel) => {
+    "seed": seedModel.seed,
+    "title": seedModel.title
   };
 
-  factory CodeModel.fromJson(Map<String, String> jsonData){
-    return CodeModel(
+  factory SeedModel.fromJson(Map<String, String> jsonData){
+    return SeedModel(
       seed: jsonData["seed"]!,
       title: jsonData["title"]!
     );
@@ -41,5 +49,12 @@ class CodeModel {
 
   static String getCode(String seed) {
     return OTP.generateTOTPCodeString(seed, DateTime.now().millisecondsSinceEpoch, isGoogle: true, interval: 30);
+  }
+  static List<String> getListCodes(List<SeedModel> seeds) {
+    List<String> codesList = [];
+    for (int i = 0; i < seeds.length; i++) {
+      codesList.insert(i, getCode(seeds[i].seed));
+    }
+    return codesList;
   }
 }
