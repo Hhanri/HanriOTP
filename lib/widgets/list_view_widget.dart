@@ -52,7 +52,7 @@ class CodeCardWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    print('code rebuilt');
+    print('code rebuilt ${seed.title}');
     return ListTile(
       title: Text(
         code,

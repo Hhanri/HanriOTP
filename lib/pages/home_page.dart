@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otp_generator/widgets/app_bar_widget.dart';
+import 'package:otp_generator/widgets/floating_action_button_widget.dart';
 import 'package:otp_generator/widgets/list_view_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,6 +13,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBarWidget(),
         body: ListViewWidget(),
+        floatingActionButton: FloatingActionButtonWidget(),
       ),
     );
   }
