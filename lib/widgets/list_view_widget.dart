@@ -13,7 +13,8 @@ class ListViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft <= 10)); //timeLeft below 10 => true, timeLeft reloads to 30 => false; 2 changes watched, so 2 rebuilds when needed
+        final refreshTiming = ref.watch(timerProvider.select((value) => value.timeLeft == 30));
+        final shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft < 11));
         final List<SeedModel> seeds = ref.watch(seedsProvider);
         List<String> codes = SeedModel.getListCodes(seeds);
         return ReorderableListView.builder(
