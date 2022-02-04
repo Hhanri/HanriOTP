@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otp_generator/providers/providers.dart';
-import 'package:otp_generator/providers/seeds_notifier.dart';
-
 import '../utils/navigation_utils.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:base32/encodings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,33 +27,45 @@ class AlertDialogWidget extends StatelessWidget {
     String _description = "";
     return AlertDialog(
       title: const Text("Add a Seed"),
-      /*
       content: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            TextFormFieldWidget(
-              field: _description,
-              fieldTitle: "Description"
-            ),
-            TextFormFieldWidget(
-              field: _seed,
-              fieldTitle: "Seed"
-            ),
-          ],
+        child: IntrinsicHeight(
+          child: Column(
+            children: [
+              TextFormFieldWidget(
+                field: _description,
+                fieldTitle: "Description",
+                valueChanged: (value) {
+                  _description = value;
+                  print(_description);
+                }, type: '',
+              ),
+              TextFormFieldWidget(
+                field: _seed,
+                fieldTitle: "Seed",
+                valueChanged: (value) {
+                  _seed = value;
+                }, type: 'seed',
+              ),
+            ],
+          ),
         ),
       ),
-
-       */
       actions: [
-        ValidateButtonWidget(
-          formKey: _formKey,
-          seed: _seed,
-          description: _description,
-          clearOnValidate: () {
-            _seed = "";
-            _description = "";
-          },
+        Consumer(
+          builder: (context, watch, child) {
+            return ValidateButtonWidget(
+              onValidate: () {
+                if (_formKey.currentState!.validate()) {
+                  print("Seed: $_seed ,description: $_description");
+                  watch.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _description));
+                  _seed = "";
+                  _description = "";
+                  Navigator.of(context).pop();
+                }
+              },
+            );
+          }
         )
       ],
     );
@@ -60,33 +73,19 @@ class AlertDialogWidget extends StatelessWidget {
 }
 
 class ValidateButtonWidget extends StatelessWidget {
-  String seed;
-  String description;
-  final GlobalKey<FormState> formKey;
-  final VoidCallback clearOnValidate;
-  ValidateButtonWidget({
+  final VoidCallback onValidate;
+  const ValidateButtonWidget({
     Key? key,
-    required this.seed,
-    required this.description,
-    required this.formKey,
-    required this.clearOnValidate
+    required this.onValidate,
   }) :  super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (BuildContext context, WidgetRef watch, child) {
-        return TextButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                print("Seed: $seed ,description: $description");
-                watch.watch(seedsProvider.notifier).addSeed(SeedModel(seed: seed, title: description));
-                clearOnValidate();
-              }
-            },
-            child: const Text("Add")
-        );
+    return TextButton(
+      onPressed: () {
+        onValidate();
       },
+      child: const Text("Add")
     );
   }
 }
@@ -94,28 +93,47 @@ class ValidateButtonWidget extends StatelessWidget {
 class TextFormFieldWidget extends StatelessWidget {
   String field;
   final String fieldTitle;
+  final ValueChanged valueChanged;
+  final String type;
   TextFormFieldWidget({
     Key? key,
     required this.field,
-    required this.fieldTitle
+    required this.fieldTitle,
+    required this.valueChanged,
+    required this.type
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text(fieldTitle),
-        TextFormField(
-          onChanged: (value) {
-            field = value;
-          },
-          validator: (String? value) {
-            if (value == null || value == "") {
-              return "Fill this field";
-            } else {
-              return null;
-            }
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(fieldTitle)
+        ),
+        Expanded(
+          child: TextFormField(
+            onChanged: (value) {
+              valueChanged(value);
+            },
+            validator: (String? value) {
+              if (value == null || value == "") {
+                return "Fill this field";
+              }
+              if (type == "seed") {
+                if (value.length % 2 != 0 || !EncodingUtils.getRegex(Encoding.standardRFC4648).hasMatch(value)){
+                  return "Wrong Code";
+                } else {
+                  return null;
+                }
+              }
+               else {
+                return null;
+              }
+            },
+          ),
         )
       ],
     );
