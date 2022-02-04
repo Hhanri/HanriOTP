@@ -17,9 +17,9 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
     //saveSeeds
   }
 
-  void modifySeed(int index, newSeed) {
+  void modifySeed(SeedModel oldSeed, SeedModel newSeed) {
     List<SeedModel> temporaryState = [...state];
-    temporaryState[index] = newSeed;
+    temporaryState[temporaryState.indexOf(oldSeed)] = newSeed;
     state = temporaryState;
     //saveSeeds
   }
@@ -34,12 +34,9 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
     printSeeds();
   }
 
-  void removeSeed(int index) {
-    List<SeedModel> temporaryState = [...state];
-    temporaryState.removeAt(index);
-    state = temporaryState;
+  void removeSeed(SeedModel seed) {
+    state = state.where((element) => element != seed).toList();
     //saveSeeds
-    state = state.where((element) => element != state[index]).toList();
   }
 
   void printSeeds() {
