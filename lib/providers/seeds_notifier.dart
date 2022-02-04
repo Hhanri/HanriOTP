@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
 
@@ -6,32 +7,39 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
 
   static final List<SeedModel> _initialState = //loadSavedSeeds
     [
-      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
-      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 2"),
-      SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 3"),
+      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
+      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 2"),
+      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 3"),
     ];
 
   void addSeed(SeedModel newSeed) {
-    state.add(newSeed);
+    state = [...state, newSeed];
     //saveSeeds
   }
 
   void modifySeed(int index, newSeed) {
-    state[index] = newSeed;
+    List<SeedModel> temporaryState = [...state];
+    temporaryState[index] = newSeed;
+    state = temporaryState;
     //saveSeeds
   }
 
   void swapSeeds(int oldIndex, int newIndex, SeedModel seed) {
     final int index = newIndex > oldIndex ? newIndex - 1 : newIndex;
-    state.removeAt(oldIndex);
-    state.insert(index, seed);
+    List<SeedModel> temporaryState = [...state];
+    temporaryState.removeAt(oldIndex);
+    temporaryState.insert(index, seed);
+    state = temporaryState;
     //saveSeeds
     printSeeds();
   }
 
   void removeSeed(int index) {
-    state.removeAt(index);
+    List<SeedModel> temporaryState = [...state];
+    temporaryState.removeAt(index);
+    state = temporaryState;
     //saveSeeds
+    state = state.where((element) => element != state[index]).toList();
   }
 
   void printSeeds() {
@@ -42,10 +50,10 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
 
 }
 
-class SeedModel {
+class SeedModel extends Equatable{
   final String seed;
   final String title;
-  SeedModel({required this.seed, required this.title});
+  const SeedModel({required this.seed, required this.title});
 
   static Map<String, String>toMap(SeedModel seedModel) => {
     "seed": seedModel.seed,
@@ -69,4 +77,7 @@ class SeedModel {
     }
     return codesList;
   }
+
+  @override
+  List<String> get props => [seed, title];
 }

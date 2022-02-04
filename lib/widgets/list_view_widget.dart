@@ -15,23 +15,46 @@ class ListViewWidget extends StatelessWidget {
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final List<SeedModel> seeds = ref.watch(seedsProvider);
         final bool shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft <= 10)); //timeLeft below 10 => true, timeLeft reloads to 30 => false; 2 changes watched, so 2 rebuilds when needed
-        final List<String> codes = SeedModel.getListCodes(seeds);
-        return ReorderableListView.builder(
-          physics: const ClampingScrollPhysics() ,
-          itemBuilder: (BuildContext context, int index) {
-            return CodeCardWidget(
-              key: Key(seeds[index].title + seeds[index].seed + index.toString()),
-              code: codes[index],
-              index: index,
-              seed: seeds[index],
-              shortTimeLeft: shortTimeLeft,
-            );
-          },
-          itemCount: seeds.length,
-          onReorder: (int oldIndex, int newIndex) {
+        return ReorderableListViewWidget(
+          seeds: seeds,
+          shortTimeLeft: shortTimeLeft,
+          onReorder: (oldIndex, newIndex) {
             ref.watch(seedsProvider.notifier).swapSeeds(oldIndex, newIndex, seeds[oldIndex]);
-      },
+          },
         );
+      },
+    );
+  }
+}
+
+class ReorderableListViewWidget extends StatelessWidget {
+  final List<SeedModel> seeds;
+  final bool shortTimeLeft;
+  final Function(int,int) onReorder;
+  const ReorderableListViewWidget({
+    Key? key,
+    required this.seeds,
+    required this.shortTimeLeft,
+    required this.onReorder,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> codes = SeedModel.getListCodes(seeds);
+    return ReorderableListView.builder(
+      physics: const ClampingScrollPhysics() ,
+      itemBuilder: (BuildContext context, int index) {
+        return CodeCardWidget(
+          key: Key(seeds[index].title + seeds[index].seed + index.toString()),
+          code: codes[index],
+          index: index,
+          seed: seeds[index],
+          shortTimeLeft: shortTimeLeft,
+        );
+      },
+      itemCount: seeds.length,
+      onReorder: (int oldIndex, int newIndex) {
+        onReorder(oldIndex, newIndex);
       },
     );
   }
