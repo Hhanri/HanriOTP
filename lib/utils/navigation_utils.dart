@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
+import 'package:otp_generator/resources/strings.dart';
 
 class NavigationUtils {
   static void showAddSeedDialog({required BuildContext context}) {
@@ -25,7 +26,7 @@ class AlertDialogWidget extends StatelessWidget {
     String _seed = "";
     String _description = "";
     return AlertDialog(
-      title: const Text("Add a Seed"),
+      title: const Text(TitleStrings.addSeed),
       content: Form(
         key: _formKey,
         child: IntrinsicHeight(
@@ -33,18 +34,19 @@ class AlertDialogWidget extends StatelessWidget {
             children: [
               TextFormFieldWidget(
                 field: _description,
-                fieldTitle: "Description",
+                fieldTitle: TitleStrings.description,
                 valueChanged: (value) {
                   _description = value;
                   print(_description);
-                }, type: '',
+                },
+                isBase32: false,
               ),
               TextFormFieldWidget(
                 field: _seed,
-                fieldTitle: "Seed",
+                fieldTitle: TitleStrings.seed,
                 valueChanged: (value) {
                   _seed = value;
-                }, type: 'seed',
+                }, isBase32: true,
               ),
             ],
           ),
@@ -84,7 +86,7 @@ class ValidateButtonWidget extends StatelessWidget {
       onPressed: () {
         onValidate();
       },
-      child: const Text("Add")
+      child: const Text(SystemStrings.add)
     );
   }
 }
@@ -93,13 +95,13 @@ class TextFormFieldWidget extends StatelessWidget {
   String field;
   final String fieldTitle;
   final ValueChanged valueChanged;
-  final String type;
+  final bool isBase32;
   TextFormFieldWidget({
     Key? key,
     required this.field,
     required this.fieldTitle,
     required this.valueChanged,
-    required this.type
+    required this.isBase32
   }) : super(key: key);
 
   @override
@@ -118,12 +120,12 @@ class TextFormFieldWidget extends StatelessWidget {
               valueChanged(value);
             },
             validator: (String? value) {
-              if (value == null || value == "") {
-                return "Fill this field";
+              if (value == null || value.isEmpty) {
+                return SystemStrings.emptyField;
               }
-              if (type == "seed") {
+              if (isBase32) {
                 if (value.length % 2 != 0 || !EncodingUtils.getRegex(Encoding.standardRFC4648).hasMatch(value)){
-                  return "Wrong Code";
+                  return SystemStrings.wrongCodeFormat;
                 } else {
                   return null;
                 }

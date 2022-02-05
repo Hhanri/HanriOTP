@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
+import 'package:otp_generator/resources/strings.dart';
 
 class AppBarFullWidget extends StatelessWidget with PreferredSizeWidget{
   const AppBarFullWidget({Key? key}) : super(key: key);
@@ -46,10 +47,10 @@ class AppBarWidget extends StatelessWidget {
                   },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Search a Seed",
+                    hintText: TitleStrings.searchSeed,
                   ),
                 )
-              : const Text("OTP Generator"),
+              : const Text(SystemStrings.appTitle),
                   elevation: 0,
           actions: [
             IconButton(

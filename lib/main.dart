@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/providers/providers.dart';
+import 'package:otp_generator/resources/strings.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     print("my app was rebuilt");
     return MaterialApp(
-      title: 'OTP Generator',
+      title: SystemStrings.appTitle,
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,

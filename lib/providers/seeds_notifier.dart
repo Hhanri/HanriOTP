@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
+import 'package:otp_generator/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SeedsNotifier extends StateNotifier<List<SeedModel>> {
@@ -46,7 +47,6 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
       print(element.title);
     }
   }
-
 }
 
 class SeedModel extends Equatable{
@@ -55,14 +55,14 @@ class SeedModel extends Equatable{
   const SeedModel({required this.seed, required this.title});
 
   static Map<String, dynamic>toMap(SeedModel seedModel) => {
-    "seed": seedModel.seed,
-    "title": seedModel.title
+    SeedModelStrings.seed: seedModel.seed,
+    SeedModelStrings.title: seedModel.title
   };
 
   factory SeedModel.fromJson(Map<String, dynamic> jsonData){
     return SeedModel(
-      seed: jsonData["seed"]!,
-      title: jsonData["title"]!
+      seed: jsonData[SeedModelStrings.seed]!,
+      title: jsonData[SeedModelStrings.title]!
     );
   }
 
@@ -84,7 +84,7 @@ class SeedModel extends Equatable{
 
   static Future<List<SeedModel>> loadSavedSeeds() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? mapList = prefs.getStringList("SavedSeeds");
+    List<String>? mapList = prefs.getStringList(SharedPreferencesStrings.savedSeeds);
     List<Map<String, dynamic>> seedModelMapList = [];
     for (String element in mapList ?? []) {
       seedModelMapList.add(jsonDecode(element));
@@ -94,7 +94,7 @@ class SeedModel extends Equatable{
 
   static void saveSeeds(List<SeedModel> seedModelList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("SavedSeeds", getSeedMapStringList(seedModelList));
+    prefs.setStringList(SharedPreferencesStrings.savedSeeds, getSeedMapStringList(seedModelList));
   }
 
   static String getCode(String seed) {

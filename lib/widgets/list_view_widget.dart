@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
+import 'package:otp_generator/resources/strings.dart';
 
 class ListViewWidget extends StatelessWidget {
   const ListViewWidget({
@@ -16,18 +17,23 @@ class ListViewWidget extends StatelessWidget {
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final bool shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft <= 10)); //timeLeft below 10 => true, timeLeft reloads to 30 => false; 2 changes watched, so 2 rebuilds when needed
         final SearchModel searching = ref.watch(searchSeedProvider);
-        if (searching.searchedSeed != "" && searching.isSearching) {
+        if (searching.searchedSeed.isNotEmpty && searching.isSearching) {
           final List<SeedModel> seeds = ref.watch(seedsProvider).where((element) => element.title.toLowerCase().contains(searching.searchedSeed.toLowerCase())).toList();
           return SimpleListViewWidget(seeds: seeds, shortTimeLeft: shortTimeLeft);
         } else {
           final List<SeedModel> seeds = ref.watch(seedsProvider);
-          return ReorderableListViewWidget(
-            seeds: seeds,
-            shortTimeLeft: shortTimeLeft,
-            onReorder: (oldIndex, newIndex) {
-              ref.watch(seedsProvider.notifier).swapSeeds(oldIndex, newIndex, seeds[oldIndex]);
-            },
-          );
+          if (seeds.isEmpty) {
+            return const Center(child: Text(SystemStrings.noSeedAdded));
+          } else {
+            return ReorderableListViewWidget(
+              seeds: seeds,
+              shortTimeLeft: shortTimeLeft,
+              onReorder: (oldIndex, newIndex) {
+                ref.watch(seedsProvider.notifier).swapSeeds(oldIndex, newIndex, seeds[oldIndex]);
+              },
+            );
+          }
+
         }
 
       },
@@ -146,7 +152,7 @@ class CopyButtonWidget extends StatelessWidget {
         Clipboard.setData(ClipboardData(text: code));
       },
       icon: const Icon(Icons.copy),
-      tooltip: 'Copy to clipboard',
+      tooltip: SystemStrings.copyToClipBoard,
     );
   }
 }
@@ -163,7 +169,7 @@ class MoreButtonWidget extends StatelessWidget {
     return IconButton(
       onPressed: () {  },
       icon: const Icon(Icons.more_vert),
-      tooltip: 'More',
+      tooltip: SystemStrings.more,
     );
   }
 }
