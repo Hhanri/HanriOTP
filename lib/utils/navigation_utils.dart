@@ -7,6 +7,7 @@ import 'package:otp_generator/resources/strings.dart';
 
 class NavigationUtils {
   static void showAddSeedDialog({required BuildContext context}) {
+    FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       barrierDismissible: true,

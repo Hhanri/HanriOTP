@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/navigation_utils.dart';
+import 'package:otp_generator/utils/navigation_utils.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({Key? key}) : super(key: key);
