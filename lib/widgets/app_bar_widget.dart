@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/providers/providers.dart';
+import 'package:otp_generator/providers/search_seed_notifier.dart';
 
-class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
-  const AppBarWidget({Key? key}) : super(key: key);
+class AppBarFullWidget extends StatelessWidget with PreferredSizeWidget{
+  const AppBarFullWidget({Key? key}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -12,10 +13,7 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        AppBar(
-          title: const Text("OTP Generator"),
-          elevation: 0,
-        ),
+        const AppBarWidget(),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final int timeLeft = ref.watch(timerProvider).timeLeft;
@@ -26,6 +24,52 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
     );
   }
 }
+
+class AppBarWidget extends StatelessWidget {
+  const AppBarWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final FocusNode focusNode = FocusNode();
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref ,Widget? child) {
+        final SearchModel searching = ref.watch(searchSeedProvider);
+        return AppBar(
+          title: searching.isSearching
+              ? TextField(
+                  focusNode: focusNode,
+                  enableSuggestions: false,
+                  maxLines: 1,
+                  autocorrect: false,
+                  onChanged: (value) {
+                    ref.watch(searchSeedProvider.notifier).searchSeed(value);
+                  },
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Search a Seed",
+                  ),
+                )
+              : const Text("OTP Generator"),
+                  elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                ref.watch(searchSeedProvider.notifier).openSearchBar();
+                if (searching.isSearching) {
+                  focusNode.unfocus();
+                } else {
+                  focusNode.requestFocus();
+                }
+              },
+              icon: searching.isSearching ? const  Icon(Icons.clear) : const Icon(Icons.search)
+            )
+          ],
+                );
+      }
+    );
+  }
+}
+
 
 class LinearProgressBarWidget extends StatelessWidget {
   const LinearProgressBarWidget({

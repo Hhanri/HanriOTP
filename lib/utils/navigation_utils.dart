@@ -52,12 +52,12 @@ class AlertDialogWidget extends StatelessWidget {
       ),
       actions: [
         Consumer(
-          builder: (context, watch, child) {
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
             return ValidateButtonWidget(
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed ,description: $_description");
-                  watch.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _description));
+                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _description));
                   _seed = "";
                   _description = "";
                   Navigator.of(context).pop();

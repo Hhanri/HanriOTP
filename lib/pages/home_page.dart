@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     print("home was rebuilt");
     return const SafeArea(
       child: Scaffold(
-        appBar: AppBarWidget(),
+        appBar: AppBarFullWidget(),
         body: ListViewWidget(),
         floatingActionButton: FloatingActionButtonWidget(),
       ),
