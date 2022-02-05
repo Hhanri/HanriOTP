@@ -1,27 +1,29 @@
+import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SeedsNotifier extends StateNotifier<List<SeedModel>> {
   SeedsNotifier() : super(_initialState);
 
-  static final List<SeedModel> _initialState = //loadSavedSeeds
-    [
-      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 1"),
-      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 2"),
-      const SeedModel(seed: "JBSWY3DPEHPK3PXP", title: "seed 3"),
-    ];
+  static final List<SeedModel> _initialState = [];
+
+  void loadInitialState() async{
+    state = await SeedModel.loadSavedSeeds();
+    print(state);
+  }
 
   void addSeed(SeedModel newSeed) {
     state = [...state, newSeed];
-    //saveSeeds
+    SeedModel.saveSeeds(state);
   }
 
   void modifySeed(SeedModel oldSeed, SeedModel newSeed) {
     List<SeedModel> temporaryState = [...state];
     temporaryState[temporaryState.indexOf(oldSeed)] = newSeed;
     state = temporaryState;
-    //saveSeeds
+    SeedModel.saveSeeds(state);
   }
 
   void swapSeeds(int oldIndex, int newIndex, SeedModel seed) {
@@ -30,13 +32,13 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
     temporaryState.removeAt(oldIndex);
     temporaryState.insert(index, seed);
     state = temporaryState;
-    //saveSeeds
+    SeedModel.saveSeeds(state);
     printSeeds();
   }
 
   void removeSeed(SeedModel seed) {
     state = state.where((element) => element != seed).toList();
-    //saveSeeds
+    SeedModel.saveSeeds(state);
   }
 
   void printSeeds() {
@@ -52,16 +54,47 @@ class SeedModel extends Equatable{
   final String title;
   const SeedModel({required this.seed, required this.title});
 
-  static Map<String, String>toMap(SeedModel seedModel) => {
+  static Map<String, dynamic>toMap(SeedModel seedModel) => {
     "seed": seedModel.seed,
     "title": seedModel.title
   };
 
-  factory SeedModel.fromJson(Map<String, String> jsonData){
+  factory SeedModel.fromJson(Map<String, dynamic> jsonData){
     return SeedModel(
       seed: jsonData["seed"]!,
       title: jsonData["title"]!
     );
+  }
+
+  static List<SeedModel> getSeedModelList(List<Map<String,dynamic>> jsonData) {
+    List<SeedModel> seedsList = [];
+    for (Map<String,dynamic> element in jsonData) {
+      seedsList.add(SeedModel.fromJson(element));
+    }
+    return seedsList;
+  }
+
+  static List<String> getSeedMapStringList(List<SeedModel> seedModelData) {
+    List<String> seedsMapList = [];
+    for (SeedModel element in seedModelData) {
+      seedsMapList.add(jsonEncode(SeedModel.toMap(element)));
+    }
+    return seedsMapList;
+  }
+
+  static Future<List<SeedModel>> loadSavedSeeds() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? mapList = prefs.getStringList("SavedSeeds");
+    List<Map<String, dynamic>> seedModelMapList = [];
+    for (String element in mapList ?? []) {
+      seedModelMapList.add(jsonDecode(element));
+    }
+    return getSeedModelList(seedModelMapList);
+  }
+
+  static void saveSeeds(List<SeedModel> seedModelList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("SavedSeeds", getSeedMapStringList(seedModelList));
   }
 
   static String getCode(String seed) {

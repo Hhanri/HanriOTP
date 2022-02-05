@@ -64,7 +64,7 @@ class AppBarWidget extends StatelessWidget {
               icon: searching.isSearching ? const  Icon(Icons.clear) : const Icon(Icons.search)
             )
           ],
-                );
+        );
       }
     );
   }
