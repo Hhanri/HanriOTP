@@ -20,7 +20,7 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
     SeedModel.saveSeeds(state);
   }
 
-  void modifySeed(SeedModel oldSeed, SeedModel newSeed) {
+  void editSeed(SeedModel oldSeed, SeedModel newSeed) {
     List<SeedModel> temporaryState = [...state];
     temporaryState[temporaryState.indexOf(oldSeed)] = newSeed;
     state = temporaryState;

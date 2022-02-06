@@ -16,7 +16,7 @@ class SystemStrings {
   static const String appTitle = "OTP Generator";
   static const String noSeedAdded = "Add Your Seeds !";
   static const String delete = "Delete";
-  static const String modify = "Modify";
+  static const String edit = "Edit";
 }
 
 class TitleStrings {

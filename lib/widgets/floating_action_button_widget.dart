@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otp_generator/utils/navigation_utils.dart';
+import 'package:otp_generator/utils/add_seed_dialog.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({Key? key}) : super(key: key);
@@ -8,7 +8,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        NavigationUtils.showAddSeedDialog(context: context);
+        AddSeedDialog.showAddSeedDialog(context: context);
       },
       child: const Icon(Icons.add),
     );

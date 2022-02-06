@@ -5,6 +5,7 @@ import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/edit_seed_dialog.dart';
 
 class ListViewWidget extends StatelessWidget {
   const ListViewWidget({
@@ -171,7 +172,7 @@ class MoreButtonWidget extends StatelessWidget {
           onSelected: (item) {
             switch (item) {
               case CodeCardMenuItem.delete : ref.watch(seedsProvider.notifier).removeSeed(seed); break;
-              case CodeCardMenuItem.modify : print("modify"); break;
+              case CodeCardMenuItem.modify : EditSeedDialog.showEditSeedDialog(context: context, previousSeed: seed);
             }
           },
           itemBuilder: (context) {
@@ -199,7 +200,7 @@ class CodeCardMenuItem{
     delete,
   ];
 
-  static const CodeCardMenuItem modify = CodeCardMenuItem(text: SystemStrings.modify);
+  static const CodeCardMenuItem modify = CodeCardMenuItem(text: SystemStrings.edit);
 
   static const CodeCardMenuItem delete = CodeCardMenuItem(text: SystemStrings.delete);
 }

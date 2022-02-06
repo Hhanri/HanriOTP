@@ -5,27 +5,32 @@ import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
 
-class NavigationUtils {
-  static void showAddSeedDialog({required BuildContext context}) {
+class EditSeedDialog {
+
+  static void showEditSeedDialog({required BuildContext context, required SeedModel previousSeed}) {
     FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
-        return const AlertDialogWidget();
+        return AlertDialogWidget(previousSeed: previousSeed,);
       },
     );
   }
 }
 
 class AlertDialogWidget extends StatelessWidget {
-  const AlertDialogWidget({Key? key}) : super(key: key);
+  final SeedModel previousSeed;
+  const AlertDialogWidget({
+    Key? key,
+    required this.previousSeed
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    String _seed = "";
-    String _description = "";
+    String _seed = previousSeed.seed;
+    String _description = previousSeed.title;
     return AlertDialog(
       title: const Text(TitleStrings.addSeed),
       content: Form(
@@ -33,7 +38,7 @@ class AlertDialogWidget extends StatelessWidget {
         child: IntrinsicHeight(
           child: Column(
             children: [
-              TextFormFieldWidget(
+              EditSeedTextFormFieldWidget(
                 field: _description,
                 fieldTitle: TitleStrings.description,
                 valueChanged: (value) {
@@ -41,13 +46,16 @@ class AlertDialogWidget extends StatelessWidget {
                   print(_description);
                 },
                 isBase32: false,
+                initialValue: _description,
               ),
-              TextFormFieldWidget(
+              EditSeedTextFormFieldWidget(
                 field: _seed,
                 fieldTitle: TitleStrings.seed,
                 valueChanged: (value) {
                   _seed = value;
-                }, isBase32: true,
+                },
+                isBase32: true,
+                initialValue: _seed,
               ),
             ],
           ),
@@ -60,7 +68,7 @@ class AlertDialogWidget extends StatelessWidget {
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed ,description: $_description");
-                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _description));
+                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _description));
                   _seed = "";
                   _description = "";
                   Navigator.of(context).pop();
@@ -92,17 +100,19 @@ class ValidateButtonWidget extends StatelessWidget {
   }
 }
 
-class TextFormFieldWidget extends StatelessWidget {
+class EditSeedTextFormFieldWidget extends StatelessWidget {
   String field;
   final String fieldTitle;
   final ValueChanged valueChanged;
   final bool isBase32;
-  TextFormFieldWidget({
+  final String initialValue;
+  EditSeedTextFormFieldWidget({
     Key? key,
     required this.field,
     required this.fieldTitle,
     required this.valueChanged,
-    required this.isBase32
+    required this.isBase32,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
@@ -117,6 +127,7 @@ class TextFormFieldWidget extends StatelessWidget {
         ),
         Expanded(
           child: TextFormField(
+            initialValue: initialValue,
             onChanged: (value) {
               valueChanged(value);
             },
@@ -131,7 +142,7 @@ class TextFormFieldWidget extends StatelessWidget {
                   return null;
                 }
               }
-               else {
+              else {
                 return null;
               }
             },
