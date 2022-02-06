@@ -21,7 +21,7 @@ class SeedModel extends Equatable{
     return SeedModel(
       seed: jsonData[SeedModelStrings.seed],
       title: jsonData[SeedModelStrings.title],
-      algorithm: AlgorithmModel.algorithms.singleWhere((element) => element.name == jsonData[SeedModelStrings.algorithm])
+      algorithm: AlgorithmModel.getAlgorithm(jsonData[SeedModelStrings.algorithm])
     );
   }
 
