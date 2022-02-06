@@ -30,7 +30,7 @@ class AlertDialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     String _seed = previousSeed.seed;
-    String _description = previousSeed.title;
+    String _title = previousSeed.title;
     return AlertDialog(
       title: const Text(TitleStrings.addSeed),
       content: Form(
@@ -39,14 +39,14 @@ class AlertDialogWidget extends StatelessWidget {
           child: Column(
             children: [
               EditSeedTextFormFieldWidget(
-                field: _description,
+                field: _title,
                 fieldTitle: TitleStrings.description,
                 valueChanged: (value) {
-                  _description = value;
-                  print(_description);
+                  _title = value;
+                  print(_title);
                 },
                 isBase32: false,
-                initialValue: _description,
+                initialValue: _title,
               ),
               EditSeedTextFormFieldWidget(
                 field: _seed,
@@ -67,10 +67,10 @@ class AlertDialogWidget extends StatelessWidget {
             return ValidateButtonWidget(
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
-                  print("Seed: $_seed ,description: $_description");
-                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _description));
+                  print("Seed: $_seed ,description: $_title");
+                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _title));
                   _seed = "";
-                  _description = "";
+                  _title = "";
                   Navigator.of(context).pop();
                 }
               },

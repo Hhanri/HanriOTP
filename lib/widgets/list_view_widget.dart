@@ -34,9 +34,7 @@ class ListViewWidget extends StatelessWidget {
               },
             );
           }
-
         }
-
       },
     );
   }
@@ -169,6 +167,8 @@ class MoreButtonWidget extends StatelessWidget {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         return PopupMenuButton<CodeCardMenuItem>(
+          tooltip: SystemStrings.more,
+          elevation: 0,
           onSelected: (item) {
             switch (item) {
               case CodeCardMenuItem.delete : ref.watch(seedsProvider.notifier).removeSeed(seed); break;
