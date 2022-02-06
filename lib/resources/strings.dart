@@ -15,6 +15,8 @@ class SystemStrings {
   static const String emptyField = "Fill this Field";
   static const String appTitle = "OTP Generator";
   static const String noSeedAdded = "Add Your Seeds !";
+  static const String delete = "Delete";
+  static const String modify = "Modify";
 }
 
 class TitleStrings {

@@ -66,7 +66,6 @@ class SimpleListViewWidget extends StatelessWidget {
   }
 }
 
-
 class ReorderableListViewWidget extends StatelessWidget {
   final List<SeedModel> seeds;
   final bool shortTimeLeft;
@@ -166,10 +165,41 @@ class MoreButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {  },
-      icon: const Icon(Icons.more_vert),
-      tooltip: SystemStrings.more,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        return PopupMenuButton<CodeCardMenuItem>(
+          onSelected: (item) {
+            switch (item) {
+              case CodeCardMenuItem.delete : ref.watch(seedsProvider.notifier).removeSeed(seed); break;
+              case CodeCardMenuItem.modify : print("modify"); break;
+            }
+          },
+          itemBuilder: (context) {
+            return [...CodeCardMenuItem.items.map(buildItem)];
+          }
+        );
+      }
     );
   }
+
+  PopupMenuItem<CodeCardMenuItem> buildItem(CodeCardMenuItem item) {
+    return PopupMenuItem<CodeCardMenuItem>(
+      value: item,
+      child: Text(item.text),
+    );
+  }
+}
+
+class CodeCardMenuItem{
+  final String text;
+  const CodeCardMenuItem({required this.text});
+
+  static final List<CodeCardMenuItem> items = [
+    modify,
+    delete,
+  ];
+
+  static const CodeCardMenuItem modify = CodeCardMenuItem(text: SystemStrings.modify);
+
+  static const CodeCardMenuItem delete = CodeCardMenuItem(text: SystemStrings.delete);
 }
