@@ -5,6 +5,7 @@ class SharedPreferencesStrings {
 class SeedModelStrings {
   static const String seed = "seed";
   static const String title = "title";
+  static const String algorithm = "algorithm";
 }
 
 class SystemStrings {

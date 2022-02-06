@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/models/code_card_menu_item_model.dart';
+import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
@@ -189,18 +191,4 @@ class MoreButtonWidget extends StatelessWidget {
       child: Text(item.text),
     );
   }
-}
-
-class CodeCardMenuItem{
-  final String text;
-  const CodeCardMenuItem({required this.text});
-
-  static final List<CodeCardMenuItem> items = [
-    modify,
-    delete,
-  ];
-
-  static const CodeCardMenuItem modify = CodeCardMenuItem(text: SystemStrings.edit);
-
-  static const CodeCardMenuItem delete = CodeCardMenuItem(text: SystemStrings.delete);
 }

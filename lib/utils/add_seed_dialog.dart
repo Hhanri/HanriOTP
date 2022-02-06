@@ -1,6 +1,8 @@
 import 'package:base32/encodings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp/otp.dart';
+import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -61,7 +63,7 @@ class AlertDialogWidget extends StatelessWidget {
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed ,description: $_title");
-                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _title));
+                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _title, algorithm: Algorithm.SHA1));
                   _seed = "";
                   _title = "";
                   Navigator.of(context).pop();
