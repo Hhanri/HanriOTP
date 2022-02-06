@@ -10,4 +10,8 @@ class AlgorithmModel {
   static Algorithm getAlgorithm(String name) {
     return AlgorithmModel.algorithms.singleWhere((element) => element.name == name);
   }
+
+  static const Algorithm defaultAlgo = Algorithm.SHA1;
+
+  static String defaultAlgoTitle = "${Algorithm.SHA1.name} (default)";
 }

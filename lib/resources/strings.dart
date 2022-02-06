@@ -25,4 +25,5 @@ class TitleStrings {
   static const String description = "Description";
   static const String addSeed = "Add a Seed";
   static const String searchSeed = "Search a Seed";
+  static const String algorithm = "Algorithm";
 }

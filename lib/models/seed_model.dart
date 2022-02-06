@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:otp/otp.dart';
-import 'package:otp_generator/models/algorithm_class.dart';
+import 'package:otp_generator/models/algorithm_model.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

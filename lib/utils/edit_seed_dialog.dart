@@ -2,9 +2,9 @@ import 'package:base32/encodings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp/otp.dart';
+import 'package:otp_generator/models/algorithm_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
-import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
 
 class EditSeedDialog {
@@ -33,6 +33,7 @@ class AlertDialogWidget extends StatelessWidget {
     final _formKey = GlobalKey<FormState>();
     String _seed = previousSeed.seed;
     String _title = previousSeed.title;
+    Algorithm _algorithm = previousSeed.algorithm;
     return AlertDialog(
       title: const Text(TitleStrings.addSeed),
       content: Form(
@@ -59,6 +60,13 @@ class AlertDialogWidget extends StatelessWidget {
                 isBase32: true,
                 initialValue: _seed,
               ),
+              SelectAlgorithmRowWidget(
+                onChange: (value) {
+                  _algorithm = value;
+                  print(_algorithm);
+                },
+                initialAlgo: _algorithm,
+              )
             ],
           ),
         ),
@@ -66,11 +74,11 @@ class AlertDialogWidget extends StatelessWidget {
       actions: [
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            return ValidateButtonWidget(
+            return EditValidateButtonWidget(
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
-                  print("Seed: $_seed ,description: $_title");
-                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _title, algorithm: Algorithm.SHA1));
+                  print("Seed: $_seed, description: $_title, $_algorithm");
+                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _title, algorithm: _algorithm));
                   _seed = "";
                   _title = "";
                   Navigator.of(context).pop();
@@ -84,9 +92,9 @@ class AlertDialogWidget extends StatelessWidget {
   }
 }
 
-class ValidateButtonWidget extends StatelessWidget {
+class EditValidateButtonWidget extends StatelessWidget {
   final VoidCallback onValidate;
-  const ValidateButtonWidget({
+  const EditValidateButtonWidget({
     Key? key,
     required this.onValidate,
   }) :  super(key: key);
@@ -97,7 +105,7 @@ class ValidateButtonWidget extends StatelessWidget {
       onPressed: () {
         onValidate();
       },
-      child: const Text(SystemStrings.add)
+      child: const Text(SystemStrings.edit)
     );
   }
 }
@@ -152,6 +160,79 @@ class EditSeedTextFormFieldWidget extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class SelectAlgorithmRowWidget extends StatelessWidget {
+  final Algorithm initialAlgo;
+  final Function(Algorithm) onChange;
+  const SelectAlgorithmRowWidget({
+    Key? key,
+    required this.onChange,
+    required this.initialAlgo
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+              TitleStrings.algorithm
+          )
+        ),
+        EditAlgorithmDropDownMenuWidget(
+          onChange: (value) {
+            onChange(value);
+          },
+          initialAlgo: initialAlgo,
+        )
+      ],
+    );
+  }
+}
+
+
+class EditAlgorithmDropDownMenuWidget extends StatefulWidget {
+  final Algorithm initialAlgo;
+  final Function(Algorithm) onChange;
+  const EditAlgorithmDropDownMenuWidget({
+    Key? key,
+    required this.onChange,
+    required this.initialAlgo,
+  }) : super(key: key);
+
+  @override
+  State<EditAlgorithmDropDownMenuWidget> createState() => _EditAlgorithmDropDownMenuWidgetState();
+}
+
+class _EditAlgorithmDropDownMenuWidgetState extends State<EditAlgorithmDropDownMenuWidget> {
+  Algorithm? _selectedAlgo;
+  @override
+  Widget build(BuildContext context) {
+    print("dropdown menu rebuilt");
+    return DropdownButton<Algorithm>(
+      elevation: 0,
+      alignment: Alignment.centerRight,
+      items: AlgorithmModel.algorithms.map(buildItem).toList(),
+      value: _selectedAlgo == null ? widget.initialAlgo : _selectedAlgo,
+      onChanged: (value) {
+        widget.onChange(value ?? AlgorithmModel.defaultAlgo);
+        setState(() {
+          _selectedAlgo = value;
+        });
+      },
+    );
+  }
+
+  DropdownMenuItem<Algorithm> buildItem(Algorithm item) {
+    return DropdownMenuItem<Algorithm>(
+      value: item,
+      child: Text(item == AlgorithmModel.defaultAlgo ? AlgorithmModel.defaultAlgoTitle : item.name),
     );
   }
 }
