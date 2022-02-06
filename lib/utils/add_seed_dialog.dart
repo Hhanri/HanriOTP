@@ -118,6 +118,7 @@ class AddSeedTextFormFieldWidget extends StatelessWidget {
         ),
         Expanded(
           child: TextFormField(
+            textAlign: TextAlign.end,
             onChanged: (value) {
               valueChanged(value);
             },

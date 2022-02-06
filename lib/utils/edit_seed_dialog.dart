@@ -128,6 +128,7 @@ class EditSeedTextFormFieldWidget extends StatelessWidget {
         Expanded(
           child: TextFormField(
             initialValue: initialValue,
+            textAlign: TextAlign.end,
             onChanged: (value) {
               valueChanged(value);
             },
