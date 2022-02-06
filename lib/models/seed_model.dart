@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:otp/otp.dart';
+import 'package:otp_generator/models/algorithm_class.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,14 +14,14 @@ class SeedModel extends Equatable{
   static Map<String, dynamic> toMap(SeedModel seedModel) => {
     SeedModelStrings.seed: seedModel.seed,
     SeedModelStrings.title: seedModel.title,
-    SeedModelStrings.algorithm: seedModel.algorithm
+    SeedModelStrings.algorithm: seedModel.algorithm.name
   };
 
   factory SeedModel.fromJson(Map<String, dynamic> jsonData){
     return SeedModel(
-        seed: jsonData[SeedModelStrings.seed],
-        title: jsonData[SeedModelStrings.title],
-        algorithm: jsonData[SeedModelStrings.algorithm]
+      seed: jsonData[SeedModelStrings.seed],
+      title: jsonData[SeedModelStrings.title],
+      algorithm: AlgorithmModel.algorithms.singleWhere((element) => element.name == jsonData[SeedModelStrings.algorithm])
     );
   }
 
@@ -74,5 +74,5 @@ class SeedModel extends Equatable{
   }
 
   @override
-  List<String> get props => [seed, title];
+  List<String> get props => [seed, title, algorithm.name];
 }

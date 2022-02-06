@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/seed_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SeedsNotifier extends StateNotifier<List<SeedModel>> {
   SeedsNotifier() : super(_initialState);
