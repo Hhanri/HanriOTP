@@ -26,6 +26,11 @@ class SecurityModel extends Equatable{
     prefs.setString("Password", newPassword);
   }
 
+  static void resetPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("Password", "");
+  }
+
   @override
   // TODO: implement props
   List<Object?> get props => [title, value];

@@ -13,6 +13,7 @@ class PinCodeNotifier extends StateNotifier<String>{
 
   void resetPassword() {
     state = _initialState;
+    SecurityModel.resetPassword();
   }
 
   void loadInitialState() async {
