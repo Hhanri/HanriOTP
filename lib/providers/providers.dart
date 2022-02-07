@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/seed_model.dart';
+import 'package:otp_generator/providers/pin_code_notifier.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/providers/seeds_notifier.dart';
 import 'package:otp_generator/providers/timer_notifier.dart';
@@ -13,4 +14,8 @@ final StateNotifierProvider<SeedsNotifier, List<SeedModel>> seedsProvider = Stat
 
 final StateNotifierProvider<SearchSeedNotifier, SearchModel> searchSeedProvider = StateNotifierProvider<SearchSeedNotifier, SearchModel>(
     (ref) => SearchSeedNotifier()
+);
+
+final StateNotifierProvider<PinCodeNotifier, String> pinCodeNotifier = StateNotifierProvider<PinCodeNotifier, String>(
+    (ref) => PinCodeNotifier()
 );

@@ -11,9 +11,12 @@ class SecurityModel extends Equatable{
     required this.title
   });
 
+  static const SecurityModel noneModel = SecurityModel(value: SecurityModelStrings.noneValue, title: SecurityModelStrings.noneTitle);
+  static const SecurityModel pinCodeModel = SecurityModel(value: SecurityModelStrings.pinCodeValue, title: SecurityModelStrings.pinCodeTitle);
+
   static List<SecurityModel> features = [
-    const SecurityModel(value: SecurityModelStrings.noneValue, title: SecurityModelStrings.noneTitle),
-    const SecurityModel(value: SecurityModelStrings.pinCodeValue, title: SecurityModelStrings.pinCodeTitle)
+    noneModel,
+    pinCodeModel
   ];
 
   static Future<String> loadPassword() async {

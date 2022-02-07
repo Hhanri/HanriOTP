@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/security_model.dart';
+import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/widgets/cancel_button_widget.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
 import 'package:flutter/services.dart';
 
-class PinCodeAlertDialog extends StatefulWidget {
+class PinCodeDialog {
+
+  static void showPinCodeDialog({required BuildContext context}) {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return const PinCodeAlertDialog();
+      }
+    );
+  }
+
+}
+
+class PinCodeAlertDialog extends ConsumerStatefulWidget {
   const PinCodeAlertDialog({Key? key}) : super(key: key);
 
   @override
-  State<PinCodeAlertDialog> createState() => _PinCodeAlertDialogState();
+  _PinCodeAlertDialogState createState() => _PinCodeAlertDialogState();
 }
 
-class _PinCodeAlertDialogState extends State<PinCodeAlertDialog> {
+class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
   @override
   Widget build(BuildContext context) {
     final List<SecurityModel> values = SecurityModel.features;
-    SecurityModel selectedValue = values[0];
+    SecurityModel selectedValue = ref.watch(pinCodeNotifier) == "" ? SecurityModel.noneModel : SecurityModel.pinCodeModel;
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     String password = "";
     String confirmedPassword = "";
@@ -68,8 +82,12 @@ class _PinCodeAlertDialogState extends State<PinCodeAlertDialog> {
             return ValidateButtonWidget(
               text: SystemStrings.save,
               onValidate: () {
-                if (_formKey.currentState!.validate()) {
+                if (_formKey.currentState!.validate() && password.isNotEmpty) {
                   print(selectedValue);
+                  ref.watch(pinCodeNotifier.notifier).changePassword(password);
+                  Navigator.of(context).pop();
+                } else {
+                  Navigator.of(context).pop();
                 }
               }
             );
