@@ -134,8 +134,6 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
   }
 }
 
-
-
 class SelectableSetting extends StatefulWidget {
   final SecurityModel value;
   final SecurityModel selectedValue;
