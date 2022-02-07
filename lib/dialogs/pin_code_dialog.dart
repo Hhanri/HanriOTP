@@ -28,50 +28,62 @@ class PinCodeAlertDialog extends ConsumerStatefulWidget {
 }
 
 class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
+  final List<SecurityModel> values = SecurityModel.features;
+  SecurityModel selectedValue = SecurityModel.noneModel;
+  String password = "";
+  String confirmedPassword = "";
   @override
   Widget build(BuildContext context) {
-    final List<SecurityModel> values = SecurityModel.features;
-    SecurityModel selectedValue = ref.watch(pinCodeNotifier) == "" ? SecurityModel.noneModel : SecurityModel.pinCodeModel;
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    String password = "";
-    String confirmedPassword = "";
     return AlertDialog(
       title: const Text(TitleStrings.security),
       content: Form(
         key: _formKey,
-        child: IntrinsicHeight(
-          child: Column(
-            children: [
-              ...List.generate(values.length, (index) {
-                return SelectableSetting(
-                  value: values[index],
-                  selectedValue: selectedValue,
+        child: SingleChildScrollView(
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                ...List.generate(values.length, (index) {
+                  return SelectableSetting(
+                    value: values[index],
+                    selectedValue: selectedValue,
+                    onChange: (value) {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                    },
+                  );
+                }),
+                PasswordTextFieldDialogWidget(
+                  hintText: TitleStrings.password,
                   onChange: (value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
+                    password = value;
                   },
-                );
-              }),
-              PasswordTextFieldWidget(
-                hintText: TitleStrings.password,
-                otherField: confirmedPassword,
-                thisField: password,
-                onChange: (value) {
-                  password = value;
-                },
-                isEnabled: selectedValue == values[0] ? false : true
-              ),
-              PasswordTextFieldWidget(
-                hintText: TitleStrings.confirmPassword,
-                otherField: password,
-                thisField: confirmedPassword,
-                onChange: (value) {
-                  confirmedPassword = value;
-                },
-                isEnabled: selectedValue == values[0] ? false : true
-              )
-            ],
+                  isEnabled: selectedValue == values[0] ? false : true,
+                  validator: (value) {
+                    if (password != confirmedPassword) {
+                      return SystemStrings.passwordsNotMatching;
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                PasswordTextFieldDialogWidget(
+                  hintText: TitleStrings.confirmPassword,
+                  onChange: (value) {
+                    confirmedPassword = value;
+                  },
+                  isEnabled: selectedValue == values[0] ? false : true,
+                  validator: (value) {
+                    if (password != confirmedPassword) {
+                      return SystemStrings.passwordsNotMatching;
+                    } else {
+                      return null;
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -82,12 +94,15 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
             return ValidateButtonWidget(
               text: SystemStrings.save,
               onValidate: () {
-                if (_formKey.currentState!.validate() && password.isNotEmpty) {
-                  print(selectedValue);
-                  ref.watch(pinCodeNotifier.notifier).changePassword(password);
+                if (selectedValue == SecurityModel.noneModel) {
+                  ref.watch(pinCodeProvider.notifier).resetPassword();
                   Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop();
+                } else if (selectedValue == SecurityModel.pinCodeModel) {
+                  if (_formKey.currentState!.validate() && password.isNotEmpty && confirmedPassword.isNotEmpty) {
+                    print(selectedValue);
+                    ref.watch(pinCodeProvider.notifier).changePassword(password);
+                    Navigator.of(context).pop();
+                  }
                 }
               }
             );
@@ -98,26 +113,24 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
   }
 }
 
-class PasswordTextFieldWidget extends StatefulWidget {
+class PasswordTextFieldDialogWidget extends StatefulWidget {
   final bool isEnabled;
   final String hintText;
-  final String otherField;
-  final String thisField;
+  final Function(String) validator;
   final Function(String) onChange;
-  const PasswordTextFieldWidget({
+  const PasswordTextFieldDialogWidget({
     Key? key,
+    required this.isEnabled,
     required this.hintText,
-    required this.otherField,
-    required this.thisField,
-    required this.onChange,
-    required this.isEnabled
+    required this.validator,
+    required this.onChange
   }) : super(key: key);
 
   @override
-  State<PasswordTextFieldWidget> createState() => _PasswordTextFieldWidgetState();
+  State<PasswordTextFieldDialogWidget> createState() => _PasswordTextFieldDialogWidgetState();
 }
 
-class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
+class _PasswordTextFieldDialogWidgetState extends State<PasswordTextFieldDialogWidget> {
   bool isHidden = true;
   @override
   Widget build(BuildContext context) {
@@ -140,13 +153,10 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
         widget.onChange(value);
       },
       validator: (value) {
-        if (widget.otherField != widget.thisField) {
-          return SystemStrings.passwordsNotMatching;
-        } else {
-          return null;
-        }
+        String? response = widget.validator(value!);
+        return response;
       },
-      keyboardType: const TextInputType.numberWithOptions(),
+      keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
     );
   }
@@ -177,7 +187,7 @@ class _SelectableSettingState extends State<SelectableSetting> {
       onChanged: (value) {
         widget.onChange(value!);
         setState(() {
-          currentValue = value;
+          currentValue = widget.selectedValue;
         });
       },
       title: Text(widget.value.title),

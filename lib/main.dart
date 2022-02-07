@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/pages/home_page.dart';
+import 'package:otp_generator/pages/pin_code_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
 
@@ -26,6 +27,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ref.watch(pinCodeProvider.notifier).loadInitialState();
       ref.watch(timerProvider.notifier).start();
       ref.watch(seedsProvider.notifier).loadInitialState();
     });
@@ -40,7 +42,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: ref.watch(pinCodeProvider) == "" ? const HomeScreen() : PinCodeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

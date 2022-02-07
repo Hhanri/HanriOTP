@@ -91,8 +91,6 @@ class AddSeedAlertDialog extends StatelessWidget {
   }
 }
 
-
-
 class AddSeedTextFormFieldWidget extends StatelessWidget {
   String field;
   final String fieldTitle;

@@ -16,6 +16,6 @@ final StateNotifierProvider<SearchSeedNotifier, SearchModel> searchSeedProvider 
     (ref) => SearchSeedNotifier()
 );
 
-final StateNotifierProvider<PinCodeNotifier, String> pinCodeNotifier = StateNotifierProvider<PinCodeNotifier, String>(
+final StateNotifierProvider<PinCodeNotifier, String> pinCodeProvider = StateNotifierProvider<PinCodeNotifier, String>(
     (ref) => PinCodeNotifier()
 );

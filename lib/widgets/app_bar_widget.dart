@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/dialogs/pin_code_dialog.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -63,6 +64,12 @@ class AppBarWidget extends StatelessWidget {
                 }
               },
               icon: searching.isSearching ? const  Icon(Icons.clear) : const Icon(Icons.search)
+            ),
+            IconButton(
+              onPressed: () {
+                PinCodeDialog.showPinCodeDialog(context: context);
+              },
+              icon: const Icon(Icons.more_vert),
             )
           ],
         );
