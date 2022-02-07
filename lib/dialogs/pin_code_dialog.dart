@@ -4,6 +4,7 @@ import 'package:otp_generator/models/security_model.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/widgets/cancel_button_widget.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
+import 'package:flutter/services.dart';
 
 class PinCodeAlertDialog extends StatefulWidget {
   const PinCodeAlertDialog({Key? key}) : super(key: key);
@@ -122,11 +123,13 @@ class _PasswordTextFieldWidgetState extends State<PasswordTextFieldWidget> {
       },
       validator: (value) {
         if (widget.otherField != widget.thisField) {
-          return "passwords not matching";
+          return SystemStrings.passwordsNotMatching;
         } else {
           return null;
         }
       },
+      keyboardType: const TextInputType.numberWithOptions(),
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
     );
   }
 }

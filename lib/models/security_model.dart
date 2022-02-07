@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:otp_generator/resources/strings.dart';
 
 class SecurityModel extends Equatable{
   final String value;
@@ -10,8 +11,8 @@ class SecurityModel extends Equatable{
   });
 
   static List<SecurityModel> features = [
-    const SecurityModel(value: "None", title: "None"),
-    const SecurityModel(value: "PIN", title: "Pin Code")
+    const SecurityModel(value: SecurityModelStrings.noneValue, title: SecurityModelStrings.noneTitle),
+    const SecurityModel(value: SecurityModelStrings.pinCodeValue, title: SecurityModelStrings.pinCodeTitle)
   ];
 
   @override

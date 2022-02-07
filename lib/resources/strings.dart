@@ -19,6 +19,14 @@ class SystemStrings {
   static const String delete = "Delete";
   static const String edit = "Edit";
   static const String save = "Save";
+  static const String passwordsNotMatching = "Passwords are not matching";
+}
+
+class SecurityModelStrings {
+  static const String noneValue = "None";
+  static const String noneTitle = "None";
+  static const String pinCodeValue = "PIN";
+  static const String pinCodeTitle = "Pin Code";
 }
 
 class TitleStrings {
