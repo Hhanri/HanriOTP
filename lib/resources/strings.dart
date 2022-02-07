@@ -18,6 +18,7 @@ class SystemStrings {
   static const String noSeedAdded = "Add Your Seeds !";
   static const String delete = "Delete";
   static const String edit = "Edit";
+  static const String save = "Save";
 }
 
 class TitleStrings {
@@ -26,4 +27,8 @@ class TitleStrings {
   static const String addSeed = "Add a Seed";
   static const String searchSeed = "Search a Seed";
   static const String algorithm = "Algorithm";
+  static const String security = "Security";
+  static const String password = "Password";
+  static const String confirmPassword = "Confirm Password";
+  static const String cancel = "Cancel";
 }

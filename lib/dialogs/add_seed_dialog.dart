@@ -6,6 +6,8 @@ import 'package:otp_generator/models/algorithm_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/widgets/cancel_button_widget.dart';
+import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class AddSeedDialog {
 
@@ -15,18 +17,18 @@ class AddSeedDialog {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
-        return const AlertDialogWidget();
+        return const AddSeedAlertDialog();
       },
     );
   }
 }
 
-class AlertDialogWidget extends StatelessWidget {
-  const AlertDialogWidget({Key? key}) : super(key: key);
+class AddSeedAlertDialog extends StatelessWidget {
+  const AddSeedAlertDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     String _seed = "";
     String _title = "";
     Algorithm _algorithm = AlgorithmModel.defaultAlgo;
@@ -67,9 +69,11 @@ class AlertDialogWidget extends StatelessWidget {
         ),
       ),
       actions: [
+        const CancelButtonWidget(),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            return AddValidateButtonWidget(
+            return ValidateButtonWidget(
+              text: SystemStrings.add,
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, algo: $_algorithm");
@@ -87,23 +91,7 @@ class AlertDialogWidget extends StatelessWidget {
   }
 }
 
-class AddValidateButtonWidget extends StatelessWidget {
-  final VoidCallback onValidate;
-  const AddValidateButtonWidget({
-    Key? key,
-    required this.onValidate,
-  }) :  super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        onValidate();
-      },
-      child: const Text(SystemStrings.add)
-    );
-  }
-}
 
 class AddSeedTextFormFieldWidget extends StatelessWidget {
   String field;

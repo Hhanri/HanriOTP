@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otp_generator/utils/add_seed_dialog.dart';
+import 'package:otp_generator/dialogs/add_seed_dialog.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({Key? key}) : super(key: key);

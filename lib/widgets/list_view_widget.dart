@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/dialogs/edit_seed_dialog.dart';
 import 'package:otp_generator/models/code_card_menu_item_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
-import 'package:otp_generator/utils/edit_seed_dialog.dart';
 
 class ListViewWidget extends StatelessWidget {
   const ListViewWidget({

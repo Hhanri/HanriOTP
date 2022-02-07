@@ -6,6 +6,7 @@ import 'package:otp_generator/models/algorithm_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class EditSeedDialog {
 
@@ -15,15 +16,15 @@ class EditSeedDialog {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
-        return AlertDialogWidget(previousSeed: previousSeed,);
+        return EditSeedAlertDialog(previousSeed: previousSeed,);
       },
     );
   }
 }
 
-class AlertDialogWidget extends StatelessWidget {
+class EditSeedAlertDialog extends StatelessWidget {
   final SeedModel previousSeed;
-  const AlertDialogWidget({
+  const EditSeedAlertDialog({
     Key? key,
     required this.previousSeed
   }) : super(key: key);
@@ -74,7 +75,8 @@ class AlertDialogWidget extends StatelessWidget {
       actions: [
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            return EditValidateButtonWidget(
+            return ValidateButtonWidget(
+              text: SystemStrings.edit,
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, $_algorithm");
@@ -88,24 +90,6 @@ class AlertDialogWidget extends StatelessWidget {
           }
         )
       ],
-    );
-  }
-}
-
-class EditValidateButtonWidget extends StatelessWidget {
-  final VoidCallback onValidate;
-  const EditValidateButtonWidget({
-    Key? key,
-    required this.onValidate,
-  }) :  super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        onValidate();
-      },
-      child: const Text(SystemStrings.edit)
     );
   }
 }
@@ -219,7 +203,7 @@ class _EditAlgorithmDropDownMenuWidgetState extends State<EditAlgorithmDropDownM
       elevation: 0,
       alignment: Alignment.centerRight,
       items: AlgorithmModel.algorithms.map(buildItem).toList(),
-      value: _selectedAlgo == null ? widget.initialAlgo : _selectedAlgo,
+      value: _selectedAlgo ?? widget.initialAlgo,
       onChanged: (value) {
         widget.onChange(value ?? AlgorithmModel.defaultAlgo);
         setState(() {
