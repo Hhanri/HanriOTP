@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/dialogs/pin_code_dialog.dart';
+import 'package:otp_generator/models/more_settings_model.dart';
+import 'package:otp_generator/pages/backup_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -65,15 +67,43 @@ class AppBarWidget extends StatelessWidget {
               },
               icon: searching.isSearching ? const  Icon(Icons.clear) : const Icon(Icons.search)
             ),
-            IconButton(
-              onPressed: () {
-                PinCodeDialog.showPinCodeDialog(context: context);
-              },
-              icon: const Icon(Icons.more_vert),
-            )
+            const AppBardMoreButtonWidget()
           ],
         );
       }
+    );
+  }
+}
+
+class AppBardMoreButtonWidget extends StatelessWidget {
+  const AppBardMoreButtonWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return PopupMenuButton<MoreSettingsMenuItem>(
+              tooltip: SystemStrings.more,
+              elevation: 0,
+              onSelected: (item) {
+                switch (item) {
+                  case MoreSettingsMenuItem.backup : Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BackupScreen())); break;
+                }
+              },
+              itemBuilder: (context) {
+                return [...MoreSettingsMenuItem.items.map(buildItem)];
+              }
+          );
+        }
+    );
+  }
+
+  PopupMenuItem<MoreSettingsMenuItem> buildItem(MoreSettingsMenuItem item) {
+    return PopupMenuItem<MoreSettingsMenuItem>(
+      value: item,
+      child: Text(item.text),
     );
   }
 }

@@ -129,7 +129,7 @@ class CodeCardWidget extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             CopyButtonWidget(code: code),
-            MoreButtonWidget(seed: seed)
+            CodeCardMoreButtonWidget(seed: seed)
           ],
         ),
       )
@@ -156,9 +156,9 @@ class CopyButtonWidget extends StatelessWidget {
   }
 }
 
-class MoreButtonWidget extends StatelessWidget {
+class CodeCardMoreButtonWidget extends StatelessWidget {
   final SeedModel seed;
-  const MoreButtonWidget({
+  const CodeCardMoreButtonWidget({
     Key? key,
     required this.seed,
   }) : super(key: key);

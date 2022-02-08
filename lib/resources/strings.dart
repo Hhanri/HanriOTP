@@ -8,6 +8,13 @@ class SeedModelStrings {
   static const String algorithm = "algorithm";
 }
 
+class BackupSettingsModelStrings {
+  static const String exportClearBackupTitle = "Export Clear Backup";
+  static const String importClearBackupTitle = "Import Clear Backup";
+  static const String exportClearBackupDescription = "Export a backup of your seeds in a clear JSON file";
+  static const String importClearBackupDescription = "Import a backup of your seeds from a clear JSON file";
+}
+
 class SystemStrings {
   static const String more = "More";
   static const String copyToClipBoard = "Copy to clipboard";
@@ -21,6 +28,8 @@ class SystemStrings {
   static const String save = "Save";
   static const String passwordsNotMatching = "Passwords are not matching";
   static const String enterYourPINCode = "Enter your PIN Code";
+  static const String backup = "Backup";
+  static const String settings = "Settings";
 }
 
 class SecurityModelStrings {
