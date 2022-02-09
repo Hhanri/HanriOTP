@@ -86,7 +86,7 @@ class BackupSettingsModel {
   }
 
   static void importFile(BuildContext context, WidgetRef ref) async{
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"]);
     if (result != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       File file = File(result.files.single.path!);
