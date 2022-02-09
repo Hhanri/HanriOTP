@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/seed_model.dart';
 
@@ -14,6 +18,22 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
   void addSeed(SeedModel newSeed) {
     state = [...state, newSeed];
     SeedModel.saveSeeds(state);
+  }
+
+  void importJson(List jsonData, BuildContext context) async {
+    List<String> mapList = jsonData.cast<String>();
+    List<Map<String, dynamic>> seedModelMapList = [];
+    try {
+      for (String element in mapList) {
+        seedModelMapList.add(jsonDecode(element));
+      }
+      if (seedModelMapList.isNotEmpty) {
+        state = SeedModel.getSeedModelList(seedModelMapList);
+        SeedModel.saveSeeds(state);
+      }
+    } catch(e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));
+    }
   }
 
   void editSeed(SeedModel oldSeed, SeedModel newSeed) {
@@ -36,6 +56,10 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
   void removeSeed(SeedModel seed) {
     state = state.where((element) => element != seed).toList();
     SeedModel.saveSeeds(state);
+  }
+
+  void resetSeeds() {
+    state = [];
   }
 
   void printSeeds() {

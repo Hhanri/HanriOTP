@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/backup_settings_model.dart';
 import 'package:otp_generator/resources/strings.dart';
 
@@ -29,11 +30,15 @@ class BackupSettingsBody extends StatelessWidget {
       itemCount: items.length,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          title: Text(items[index].title),
-          subtitle: Text(items[index].description),
-          onTap: () {
-            items[index].function(context);
+        return Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return ListTile(
+              title: Text(items[index].title),
+              subtitle: Text(items[index].description),
+              onTap: () {
+                items[index].function(context, ref);
+              }
+            );
           }
         );
       },

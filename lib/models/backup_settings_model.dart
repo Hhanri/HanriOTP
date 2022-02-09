@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:otp_generator/providers/providers.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
 
 class BackupSettingsModel {
   final String title;
   final String description;
-  final Function(BuildContext) function;
+  final Function(BuildContext, WidgetRef) function;
 
   BackupSettingsModel({
     required this.title,
@@ -25,17 +28,18 @@ class BackupSettingsModel {
   static final BackupSettingsModel exportClearBackup = BackupSettingsModel(
     title: BackupSettingsModelStrings.exportClearBackupTitle,
     description: BackupSettingsModelStrings.exportClearBackupDescription,
-    function: (context) async{
+    function: (context, ref) async {
       print("export backup");
-      await saveFile(context);
+      await exportFile(context);
     }
   );
 
   static final BackupSettingsModel importClearBackup = BackupSettingsModel(
     title: BackupSettingsModelStrings.importClearBackupTitle,
     description: BackupSettingsModelStrings.importClearBackupDescription,
-    function: (context) async {
+    function: (context, ref) {
       print("import backup");
+      importFile(context, ref);
     }
   );
 
@@ -50,7 +54,7 @@ class BackupSettingsModel {
     }
     return false;
   }
-  static Future<bool> saveFile(BuildContext context) async {
+  static Future<bool> exportFile(BuildContext context) async {
     String date = DateFormat('yyyy-MM-dd_HH:mm:ss').format(DateTime.now());
     String fileName = "$date.json";
     Directory? directory;
@@ -78,6 +82,21 @@ class BackupSettingsModel {
       return false;
     } catch(e) {
       return false;
+    }
+  }
+
+  static void importFile(BuildContext context, WidgetRef ref) async{
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      File file = File(result.files.single.path!);
+      try {
+        print(file.readAsStringSync());
+        ref.watch(seedsProvider.notifier).importJson(jsonDecode(file.readAsStringSync()), context);
+      } catch(e) {
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));
+      }
     }
   }
 }
