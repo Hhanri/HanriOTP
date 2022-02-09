@@ -33,6 +33,11 @@ class SystemStrings {
   static const String settings = "Settings";
 }
 
+class SettingsMenuModelString {
+  static const String pinCode = "Pin Code";
+  static const String timer = "Timer";
+}
+
 class SecurityModelStrings {
   static const String noneValue = "None";
   static const String noneTitle = "None";

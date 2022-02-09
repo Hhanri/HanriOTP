@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otp_generator/dialogs/pin_code_dialog.dart';
-import 'package:otp_generator/dialogs/timer_settings_dialog.dart';
+import 'package:otp_generator/models/settings_menu_model.dart';
 import 'package:otp_generator/resources/strings.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -12,21 +11,16 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(SystemStrings.settings),
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: const Text("Pin Code"),
+      body: ListView.builder(
+        itemCount: SettingsMenuModel.settings.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(SettingsMenuModel.settings[index].title),
             onTap: () {
-              PinCodeDialog.showPinCodeDialog(context: context);
+              SettingsMenuModel.settings[index].onTap(context);
             },
-          ),
-          ListTile(
-            title: const Text("Timer"),
-            onTap: () {
-              TimerSettingsDialog.showTimerSettingsDialog(context: context);
-            },
-          )
-        ],
+          );
+        },
       ),
     );
   }
