@@ -8,6 +8,7 @@ import 'package:otp_generator/providers/timer_notifier.dart';
 final StateNotifierProvider<TimerNotifier, TimerModel>  timerProvider = StateNotifierProvider<TimerNotifier, TimerModel>(
     (ref) => TimerNotifier()
 );
+
 final StateNotifierProvider<SeedsNotifier, List<SeedModel>> seedsProvider = StateNotifierProvider<SeedsNotifier, List<SeedModel>>(
     (ref) => SeedsNotifier()
 );

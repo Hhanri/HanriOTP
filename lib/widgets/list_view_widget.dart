@@ -18,16 +18,18 @@ class ListViewWidget extends StatelessWidget {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         final bool shortTimeLeft = ref.watch(timerProvider.select((value) => value.timeLeft <= 10)); //timeLeft below 10 => true, timeLeft reloads to 30 => false; 2 changes watched, so 2 rebuilds when needed
+        final int timer = ref.watch(timerProvider.select((value) => value.timer));
         final SearchModel searching = ref.watch(searchSeedProvider);
         if (searching.searchedSeed.isNotEmpty && searching.isSearching) {
           final List<SeedModel> seeds = ref.watch(seedsProvider).where((element) => element.title.toLowerCase().contains(searching.searchedSeed.toLowerCase())).toList();
-          return SimpleListViewWidget(seeds: seeds, shortTimeLeft: shortTimeLeft);
+          return SimpleListViewWidget(seeds: seeds, shortTimeLeft: shortTimeLeft, timer: timer,);
         } else {
           final List<SeedModel> seeds = ref.watch(seedsProvider);
           if (seeds.isEmpty) {
             return const Center(child: Text(SystemStrings.noSeedAdded));
           } else {
             return ReorderableListViewWidget(
+              timer: timer,
               seeds: seeds,
               shortTimeLeft: shortTimeLeft,
               onReorder: (oldIndex, newIndex) {
@@ -42,17 +44,19 @@ class ListViewWidget extends StatelessWidget {
 }
 
 class SimpleListViewWidget extends StatelessWidget {
+  final int timer;
   final List<SeedModel> seeds;
   final bool shortTimeLeft;
   const SimpleListViewWidget({
     Key? key,
+    required this.timer,
     required this.seeds,
     required this.shortTimeLeft
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<String> codes = SeedModel.getListCodes(seeds);
+    List<String> codes = SeedModel.getListCodes(seeds: seeds, timer: timer);
     return ListView.builder(
       itemCount: seeds.length,
       itemBuilder: (BuildContext context, int index) {
@@ -67,6 +71,7 @@ class SimpleListViewWidget extends StatelessWidget {
 }
 
 class ReorderableListViewWidget extends StatelessWidget {
+  final int timer;
   final List<SeedModel> seeds;
   final bool shortTimeLeft;
   final Function(int,int) onReorder;
@@ -75,11 +80,12 @@ class ReorderableListViewWidget extends StatelessWidget {
     required this.seeds,
     required this.shortTimeLeft,
     required this.onReorder,
+    required this.timer,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<String> codes = SeedModel.getListCodes(seeds);
+    List<String> codes = SeedModel.getListCodes(seeds: seeds, timer: timer);
     return ReorderableListView.builder(
       physics: const ClampingScrollPhysics() ,
       itemBuilder: (BuildContext context, int index) {

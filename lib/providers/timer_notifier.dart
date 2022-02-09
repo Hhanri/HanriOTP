@@ -1,25 +1,37 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/models/timer_settings_model.dart';
+import 'package:otp_generator/resources/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimerNotifier extends StateNotifier<TimerModel>{
   TimerNotifier() : super(_initialState);
 
-  static final _initialState = TimerModel(Ticker.getRemainingTime());
+  static final _initialState = TimerModel(timeLeft: Ticker.getRemainingTime(30), timer: TimerSettingsModel.timer30.timer);
 
   final Ticker _ticker = Ticker();
   StreamSubscription<int>? _tickerSubscription;
 
-  void start() {
-    _startTimer();
+  void start()async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int timer = prefs.getInt(SharedPreferencesStrings.savedTimer) ?? 30;
+    print(timer);
+    _startTimer(timer);
   }
 
-  void _startTimer() {
+  void _startTimer(int timer) {
     _tickerSubscription?.cancel();
     _tickerSubscription =
-      _ticker.tick().listen((duration) {
-        state = TimerModel(duration);
+      _ticker.tick(timer).listen((duration) {
+        state = TimerModel(timeLeft: duration, timer: timer);
       });
-    state = TimerModel(Ticker.getRemainingTime());
+    state = TimerModel(timer: timer, timeLeft: Ticker.getRemainingTime(timer));
+  }
+
+  void changeTimer(int newTimer) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(SharedPreferencesStrings.savedTimer, newTimer) ;
+    start();
   }
 
   @override
@@ -30,15 +42,16 @@ class TimerNotifier extends StateNotifier<TimerModel>{
 }
 
 class Ticker {
-  Stream<int> tick() {
-    return Stream.periodic(const Duration(seconds: 1), (_) => getRemainingTime());
+  Stream<int> tick(int timer) {
+    return Stream.periodic(const Duration(seconds: 1), (_) => getRemainingTime(timer));
   }
-  static int getRemainingTime() {
-    return 30 - (DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond)%30;
+  static int getRemainingTime(int timer) {
+    return timer - (DateTime.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond)%timer;
   }
 }
 
 class TimerModel {
   final int timeLeft;
-  TimerModel(this.timeLeft);
+  final int timer;
+  TimerModel({required this.timeLeft, required this.timer});
 }

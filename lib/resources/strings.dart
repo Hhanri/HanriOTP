@@ -1,5 +1,6 @@
 class SharedPreferencesStrings {
   static const String savedSeeds = "SavedSeeds";
+  static const String savedTimer = "SavedTimer";
 }
 
 class SeedModelStrings {

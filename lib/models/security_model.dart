@@ -2,19 +2,19 @@ import 'package:equatable/equatable.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SecurityModel extends Equatable{
+class SecurityPinCodeModel extends Equatable{
   final String value;
   final String title;
 
-  const SecurityModel({
+  const SecurityPinCodeModel({
     required this.value,
     required this.title
   });
 
-  static const SecurityModel noneModel = SecurityModel(value: SecurityModelStrings.noneValue, title: SecurityModelStrings.noneTitle);
-  static const SecurityModel pinCodeModel = SecurityModel(value: SecurityModelStrings.pinCodeValue, title: SecurityModelStrings.pinCodeTitle);
+  static const SecurityPinCodeModel noneModel = SecurityPinCodeModel(value: SecurityModelStrings.noneValue, title: SecurityModelStrings.noneTitle);
+  static const SecurityPinCodeModel pinCodeModel = SecurityPinCodeModel(value: SecurityModelStrings.pinCodeValue, title: SecurityModelStrings.pinCodeTitle);
 
-  static List<SecurityModel> features = [
+  static List<SecurityPinCodeModel> features = [
     noneModel,
     pinCodeModel
   ];

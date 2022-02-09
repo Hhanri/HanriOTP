@@ -56,19 +56,19 @@ class SeedModel extends Equatable{
     prefs.setStringList(SharedPreferencesStrings.savedSeeds, getSeedMapStringList(seedModelList));
   }
 
-  static String getCode({required String seed,required  Algorithm algorithm}) {
+  static String getCode({required String seed, required  Algorithm algorithm, required int timer}) {
     return OTP.generateTOTPCodeString(
         seed,
         DateTime.now().millisecondsSinceEpoch,
         isGoogle: true,
         algorithm: algorithm,
-        interval: 30
+        interval: timer
     );
   }
-  static List<String> getListCodes(List<SeedModel> seeds) {
+  static List<String> getListCodes({required List<SeedModel> seeds, required int timer}) {
     List<String> codesList = [];
     for (int i = 0; i < seeds.length; i++) {
-      codesList.insert(i, getCode(seed: seeds[i].seed, algorithm: seeds[i].algorithm));
+      codesList.insert(i, getCode(seed: seeds[i].seed, algorithm: seeds[i].algorithm, timer: timer));
     }
     return codesList;
   }

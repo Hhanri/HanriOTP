@@ -28,8 +28,8 @@ class PinCodeAlertDialog extends ConsumerStatefulWidget {
 }
 
 class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
-  final List<SecurityModel> values = SecurityModel.features;
-  SecurityModel selectedValue = SecurityModel.noneModel;
+  final List<SecurityPinCodeModel> values = SecurityPinCodeModel.features;
+  SecurityPinCodeModel selectedValue = SecurityPinCodeModel.noneModel;
   String password = "";
   String confirmedPassword = "";
   @override
@@ -44,7 +44,7 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
             child: Column(
               children: [
                 ...List.generate(values.length, (index) {
-                  return SelectableSetting(
+                  return PinCodeSelectableSetting(
                     value: values[index],
                     selectedValue: selectedValue,
                     onChange: (value) {
@@ -94,10 +94,10 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
             return ValidateButtonWidget(
               text: SystemStrings.save,
               onValidate: () {
-                if (selectedValue == SecurityModel.noneModel) {
+                if (selectedValue == SecurityPinCodeModel.noneModel) {
                   ref.watch(pinCodeProvider.notifier).resetPassword();
                   Navigator.of(context).pop();
-                } else if (selectedValue == SecurityModel.pinCodeModel) {
+                } else if (selectedValue == SecurityPinCodeModel.pinCodeModel) {
                   if (_formKey.currentState!.validate() && password.isNotEmpty && confirmedPassword.isNotEmpty) {
                     print(selectedValue);
                     ref.watch(pinCodeProvider.notifier).changePassword(password);
@@ -162,11 +162,11 @@ class _PasswordTextFieldDialogWidgetState extends State<PasswordTextFieldDialogW
   }
 }
 
-class SelectableSetting extends StatefulWidget {
-  final SecurityModel value;
-  final SecurityModel selectedValue;
-  final Function(SecurityModel) onChange;
-  const SelectableSetting({
+class PinCodeSelectableSetting extends StatefulWidget {
+  final SecurityPinCodeModel value;
+  final SecurityPinCodeModel selectedValue;
+  final Function(SecurityPinCodeModel) onChange;
+  const PinCodeSelectableSetting({
     Key? key,
     required this.value,
     required this.selectedValue,
@@ -174,14 +174,14 @@ class SelectableSetting extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SelectableSetting> createState() => _SelectableSettingState();
+  State<PinCodeSelectableSetting> createState() => _PinCodeSelectableSettingState();
 }
 
-class _SelectableSettingState extends State<SelectableSetting> {
-  SecurityModel? currentValue;
+class _PinCodeSelectableSettingState extends State<PinCodeSelectableSetting> {
+  SecurityPinCodeModel? currentValue;
   @override
   Widget build(BuildContext context) {
-    return RadioListTile<SecurityModel>(
+    return RadioListTile<SecurityPinCodeModel>(
       value: currentValue == null ? widget.value : currentValue!,
       groupValue: widget.selectedValue,
       onChanged: (value) {

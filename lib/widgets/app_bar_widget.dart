@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otp_generator/dialogs/pin_code_dialog.dart';
 import 'package:otp_generator/models/more_settings_model.dart';
 import 'package:otp_generator/pages/backup_page.dart';
+import 'package:otp_generator/pages/settings_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -21,7 +21,8 @@ class AppBarFullWidget extends StatelessWidget with PreferredSizeWidget{
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final int timeLeft = ref.watch(timerProvider).timeLeft;
-            return LinearProgressBarWidget(timeLeft: timeLeft);
+            final int timer = ref.watch(timerProvider).timer;
+            return LinearProgressBarWidget(timeLeft: timeLeft, timer: timer,);
           },
         ),
       ]
@@ -90,6 +91,7 @@ class AppBardMoreButtonWidget extends StatelessWidget {
               onSelected: (item) {
                 switch (item) {
                   case MoreSettingsMenuItem.backup : Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BackupScreen())); break;
+                  case MoreSettingsMenuItem.settings : Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen())); break;
                 }
               },
               itemBuilder: (context) {
@@ -110,17 +112,18 @@ class AppBardMoreButtonWidget extends StatelessWidget {
 
 
 class LinearProgressBarWidget extends StatelessWidget {
+  final int timeLeft;
+  final int timer;
   const LinearProgressBarWidget({
     Key? key,
     required this.timeLeft,
+    required this.timer,
   }) : super(key: key);
-
-  final int timeLeft;
 
   @override
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
-      value: timeLeft.toDouble()/30,
+      value: timeLeft.toDouble()/timer,
       color: timeLeft < 11 ? Colors.red : Colors.yellow,
       backgroundColor: Colors.transparent,
     );

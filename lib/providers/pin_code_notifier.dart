@@ -8,15 +8,15 @@ class PinCodeNotifier extends StateNotifier<String>{
 
   void changePassword(String newPassword) {
     state = newPassword;
-    SecurityModel.savePassword(newPassword);
+    SecurityPinCodeModel.savePassword(newPassword);
   }
 
   void resetPassword() {
     state = _initialState;
-    SecurityModel.resetPassword();
+    SecurityPinCodeModel.resetPassword();
   }
 
   void loadInitialState() async {
-    state = await SecurityModel.loadPassword();
+    state = await SecurityPinCodeModel.loadPassword();
   }
 }
