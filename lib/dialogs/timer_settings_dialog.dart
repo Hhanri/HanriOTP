@@ -8,28 +8,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:otp_generator/providers/providers.dart';
 
 class TimerSettingsDialog {
-  static void showTimerSettingsDialog({required BuildContext context}) {
+  static void showTimerSettingsDialog({required BuildContext context, required int selectedTimer}) {
     FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
-        return const TimerSettingsAlertDialog();
+        return TimerSettingsAlertDialog(selectedTimer: selectedTimer);
       },
     );
   }
 }
 
 class TimerSettingsAlertDialog extends ConsumerStatefulWidget {
-  const TimerSettingsAlertDialog({Key? key}) : super(key: key);
+  final int selectedTimer;
+  const TimerSettingsAlertDialog({
+    Key? key,
+    required this.selectedTimer
+  }) : super(key: key);
 
   @override
   _TimerSettingsAlertDialogState createState() => _TimerSettingsAlertDialogState();
 }
 
 class _TimerSettingsAlertDialogState extends ConsumerState<TimerSettingsAlertDialog> {
+  TimerSettingsModel? selectedValue;
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = TimerSettingsModel.timers.singleWhere((element) => element.timer == widget.selectedTimer);
+  }
   final List<TimerSettingsModel> values = TimerSettingsModel.timers;
-  TimerSettingsModel selectedValue = TimerSettingsModel.timer30;
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -44,7 +53,7 @@ class _TimerSettingsAlertDialogState extends ConsumerState<TimerSettingsAlertDia
                 ...List.generate(values.length, (index) {
                   return TimerSelectableSetting(
                     value: values[index],
-                    selectedValue: selectedValue,
+                    selectedValue: selectedValue!,
                     onChange: (value) {
                       setState(() {
                         selectedValue = value;
@@ -66,7 +75,7 @@ class _TimerSettingsAlertDialogState extends ConsumerState<TimerSettingsAlertDia
               text: SystemStrings.save,
               onValidate: () async{
                 final SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setInt(SharedPreferencesStrings.savedTimer, selectedValue.timer);
+                prefs.setInt(SharedPreferencesStrings.savedTimer, selectedValue!.timer);
                 ref.watch(timerProvider.notifier).start();
                 Navigator.of(context).pop();
               }
