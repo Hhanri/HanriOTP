@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptTypeInPasswordDialog {
   static void showEncryptTypeInPasswordDialog({required BuildContext context}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
@@ -27,7 +26,7 @@ class EncryptTypeInPasswordAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String password = "";
+        String password = "";
     return AlertDialog(
       title: const Text(SystemStrings.password),
       content: TypeInPasswordTextFieldWidget(
@@ -37,19 +36,24 @@ class EncryptTypeInPasswordAlertDialog extends StatelessWidget {
       ),
       actions: [
         ValidateButtonWidget(
-          onValidate: () async {
-            final AesCrypt crypt = AesCrypt();
-            final SharedPreferences prefs = await SharedPreferences.getInstance();
-            crypt.setPassword(password);
-            String file = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
-            String date = FileUtils.getDateFormatFileName();
-            String fileName = "${FileUtils.rootPath}$date${FileUtils.jsonExt}${FileUtils.aesExt}";
-            crypt.encryptTextToFileSync(file, fileName, utf16: true);
+          onValidate: () {
+            exportEncryptedFile(password);
+            Navigator.of(context).pop();
           },
           text: SystemStrings.ok
         )
       ],
     );
+  }
+
+  void exportEncryptedFile(String password) async {
+    final AesCrypt crypt = AesCrypt();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    crypt.setPassword(password);
+    String file = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
+    String date = FileUtils.getDateFormatFileName();
+    String fileName = "${FileUtils.rootPath}$date${FileUtils.jsonExt}${FileUtils.aesExt}";
+    crypt.encryptTextToFileSync(file, fileName, utf16: true);
   }
 }
 
