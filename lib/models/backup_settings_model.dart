@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:otp_generator/dialogs/encrypt_type_in_pasword_dialog.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,14 @@ class BackupSettingsModel {
     required this.function
   });
 
-  static final List<BackupSettingsModel> items = [
+  static final List<BackupSettingsModel> clearBackupItems = [
     exportClearBackup,
     importClearBackup
+  ];
+
+  static final List<BackupSettingsModel> encryptedBackupItems = [
+    exportEncryptedBackup,
+    importEncryptedBackup
   ];
 
   static final BackupSettingsModel exportClearBackup = BackupSettingsModel(
@@ -30,7 +36,7 @@ class BackupSettingsModel {
     description: BackupSettingsModelStrings.exportClearBackupDescription,
     function: (context, ref) async {
       print("export backup");
-      await exportFile(context);
+      await exportClearFile(context);
     }
   );
 
@@ -39,8 +45,25 @@ class BackupSettingsModel {
     description: BackupSettingsModelStrings.importClearBackupDescription,
     function: (context, ref) {
       print("import backup");
-      importFile(context, ref);
+      importClearFile(context, ref, false);
     }
+  );
+
+  static final BackupSettingsModel importEncryptedBackup = BackupSettingsModel(
+    title: BackupSettingsModelStrings.importEncryptedBackupTitle,
+    description: BackupSettingsModelStrings.importEncryptedBackupDescription,
+    function: (context, ref) {
+
+    }
+  );
+
+  static final BackupSettingsModel exportEncryptedBackup = BackupSettingsModel(
+      title: BackupSettingsModelStrings.exportEncryptedBackupTitle,
+      description: BackupSettingsModelStrings.exportEncryptedBackupDescription,
+      function: (context, ref) {
+        print("export encrypted backup");
+        exportEncryptedFile(context);
+      }
   );
 
   static Future<bool> _requestPermission(Permission permission) async {
@@ -54,7 +77,7 @@ class BackupSettingsModel {
     }
     return false;
   }
-  static Future<bool> exportFile(BuildContext context) async {
+  static Future<bool> exportClearFile(BuildContext context) async {
     String date = DateFormat('yyyy-MM-dd_HH:mm:ss').format(DateTime.now());
     String fileName = "$date.json";
     Directory? directory;
@@ -85,7 +108,7 @@ class BackupSettingsModel {
     }
   }
 
-  static void importFile(BuildContext context, WidgetRef ref) async{
+  static void importClearFile(BuildContext context, WidgetRef ref, bool isEncrypted) async{
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"]);
     if (result != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -97,6 +120,12 @@ class BackupSettingsModel {
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));
       }
+    }
+  }
+
+  static void exportEncryptedFile(BuildContext context) async{
+    if (await _requestPermission(Permission.storage)) {
+      return EncryptTypeInPasswordDialog.showEncryptTypeInPasswordDialog(context: context);
     }
   }
 }

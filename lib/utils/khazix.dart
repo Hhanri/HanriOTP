@@ -12,6 +12,5 @@ class Khazix {
   }
   static String decryptPin(Encrypted encryptedText) {
     return encrypter.decrypt(encryptedText, iv: vi);
-
   }
 }

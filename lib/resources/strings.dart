@@ -14,6 +14,11 @@ class BackupSettingsModelStrings {
   static const String importClearBackupTitle = "Import Clear Backup";
   static const String exportClearBackupDescription = "Export a backup of your seeds in a clear JSON file";
   static const String importClearBackupDescription = "Import a backup of your seeds from a clear JSON file";
+  static const String exportEncryptedBackupTitle = "Export Encrypted Backup";
+  static const String importEncryptedBackupTitle = "Import Encrypted Backup";
+  static const String exportEncryptedBackupDescription = "Export a backup of your seeds in an encrypted AES file";
+  static const String importEncryptedBackupDescription = "Import a backup of your seeds from a encrypted AES file";
+
 }
 
 class SystemStrings {
@@ -33,6 +38,8 @@ class SystemStrings {
   static const String backup = "Backup";
   static const String settings = "Settings";
   static const String ok = "OK";
+  static const String qrCode = "QR Code";
+  static const String password = "Password";
 }
 
 class SettingsMenuModelString {

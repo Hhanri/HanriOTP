@@ -27,7 +27,7 @@ class QRCodeAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("QR Code"),
+      title: const Text(SystemStrings.qrCode),
       content: IntrinsicHeight(
         child: SizedBox(
           height: 300,
