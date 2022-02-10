@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:otp_generator/dialogs/encrypt_type_in_pasword_dialog.dart';
+import 'package:otp_generator/dialogs/encrypt_type_in_password_dialog.dart';
 import 'package:otp_generator/providers/providers.dart';
+import 'package:otp_generator/utils/file_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -78,13 +78,13 @@ class BackupSettingsModel {
     return false;
   }
   static Future<bool> exportClearFile(BuildContext context) async {
-    String date = DateFormat('yyyy-MM-dd_HH:mm:ss').format(DateTime.now());
-    String fileName = "$date.json";
+    String date = FileUtils.getDateFormatFileName();
+    String fileName = "$date${FileUtils.jsonExt}";
     Directory? directory;
     try{
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
-          directory = Directory("/storage/emulated/0/HanriOTP");
+          directory = Directory(FileUtils.rootPath);
           print(directory.path);
         }
       }
@@ -111,7 +111,6 @@ class BackupSettingsModel {
   static void importClearFile(BuildContext context, WidgetRef ref, bool isEncrypted) async{
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"]);
     if (result != null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       File file = File(result.files.single.path!);
       try {
         print(file.readAsStringSync());
