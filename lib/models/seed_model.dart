@@ -73,6 +73,15 @@ class SeedModel extends Equatable{
     return codesList;
   }
 
+  static Uri getLink({required String title, required String seed, required Algorithm algorithm}) {
+    return Uri(
+      scheme: "otpauth",
+      host: "totp",
+      pathSegments: [title],
+      queryParameters: { "secret" : seed, "algorithm": algorithm.name}
+    );
+  }
+
   @override
   List<String> get props => [seed, title, algorithm.name];
 }
