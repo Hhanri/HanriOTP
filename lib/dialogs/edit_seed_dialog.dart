@@ -33,7 +33,7 @@ class EditSeedAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     String _seed = previousSeed.seed;
-    String _title = previousSeed.title;
+    String _title = Uri.decodeQueryComponent(previousSeed.title);
     Algorithm _algorithm = previousSeed.algorithm;
     return AlertDialog(
       title: const Text(TitleStrings.addSeed),
@@ -80,7 +80,7 @@ class EditSeedAlertDialog extends StatelessWidget {
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, $_algorithm");
-                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: _title, algorithm: _algorithm));
+                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm));
                   _seed = "";
                   _title = "";
                   Navigator.of(context).pop();

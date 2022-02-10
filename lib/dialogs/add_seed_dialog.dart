@@ -77,7 +77,7 @@ class AddSeedAlertDialog extends StatelessWidget {
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, algo: $_algorithm");
-                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: _title, algorithm: _algorithm));
+                  ref.watch(seedsProvider.notifier).addSeed(SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm));
                   _seed = "";
                   _title = "";
                   Navigator.of(context).pop();
