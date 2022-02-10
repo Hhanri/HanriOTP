@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/dialogs/edit_seed_dialog.dart';
+import 'package:otp_generator/dialogs/qr_code_dialog.dart';
 import 'package:otp_generator/models/code_card_menu_item_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
@@ -128,7 +129,7 @@ class CodeCardWidget extends StatelessWidget{
           color: shortTimeLeft ? Colors.red : Colors.white
         ),
       ),
-      subtitle: Text(seed.title),
+      subtitle: Text(Uri.decodeQueryComponent(seed.title)),
       trailing: FittedBox(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,7 +180,8 @@ class CodeCardMoreButtonWidget extends StatelessWidget {
           onSelected: (item) {
             switch (item) {
               case CodeCardMenuItem.delete : ref.watch(seedsProvider.notifier).removeSeed(seed); break;
-              case CodeCardMenuItem.modify : EditSeedDialog.showEditSeedDialog(context: context, previousSeed: seed);
+              case CodeCardMenuItem.modify : EditSeedDialog.showEditSeedDialog(context: context, previousSeed: seed); break;
+              case CodeCardMenuItem.showQRCode : QRCodeDialog.showQRCodeDialog(context: context, seed: seed);
             }
           },
           itemBuilder: (context) {

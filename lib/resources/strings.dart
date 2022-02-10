@@ -26,11 +26,13 @@ class SystemStrings {
   static const String noSeedAdded = "Add Your Seeds !";
   static const String delete = "Delete";
   static const String edit = "Edit";
+  static const String showQRCode = "Show QR Code";
   static const String save = "Save";
   static const String passwordsNotMatching = "Passwords are not matching";
   static const String enterYourPINCode = "Enter your PIN Code";
   static const String backup = "Backup";
   static const String settings = "Settings";
+  static const String ok = "OK";
 }
 
 class SettingsMenuModelString {
