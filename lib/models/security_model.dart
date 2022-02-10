@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/khazix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SecurityPinCodeModel extends Equatable{
@@ -26,7 +29,7 @@ class SecurityPinCodeModel extends Equatable{
 
   static void savePassword(String newPassword) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("Password", newPassword);
+    prefs.setString("Password", Khazix.encryptPin(newPassword).base64);
   }
 
   static void resetPassword() async {

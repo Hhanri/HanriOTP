@@ -1,10 +1,12 @@
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/khazix.dart';
 import 'package:otp_generator/utils/route_generator.dart';
+import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class PinCodeScreen extends StatelessWidget {
   PinCodeScreen({Key? key}) : super(key: key);
@@ -42,13 +44,13 @@ class PinCodeScreen extends StatelessWidget {
                       children: [
                         Consumer(
                           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                            final String pinCode = ref.watch(pinCodeProvider);
-                            return TextButton(
-                              child: const Text(
-                                TitleStrings.unlock
-                              ),
-                              onPressed: () {
-                                if (password == pinCode) {
+                            final String khazix = ref.watch(pinCodeProvider);
+                            return ValidateButtonWidget(
+                              text: TitleStrings.unlock,
+                              onValidate: () {
+                                if (password == Khazix.decryptPin(encrypt.Encrypted.from64(khazix))) {
+                                  print("ecrypted: $khazix");
+                                  print("decrypted: ${Khazix.decryptPin(encrypt.Encrypted.from64(khazix))}");
                                   Navigator.of(context).pushReplacementNamed(homePage);
                                 } else {
                                   SystemNavigator.pop();
