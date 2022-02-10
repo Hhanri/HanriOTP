@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/route_generator.dart';
 
 class PinCodeScreen extends StatelessWidget {
   PinCodeScreen({Key? key}) : super(key: key);
@@ -48,9 +49,7 @@ class PinCodeScreen extends StatelessWidget {
                               ),
                               onPressed: () {
                                 if (password == pinCode) {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(builder: (context) => const HomeScreen())
-                                  );
+                                  Navigator.of(context).pushReplacementNamed(homePage);
                                 } else {
                                   SystemNavigator.pop();
                                 }

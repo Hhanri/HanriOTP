@@ -6,6 +6,7 @@ import 'package:otp_generator/pages/settings_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/route_generator.dart';
 
 class AppBarFullWidget extends StatelessWidget with PreferredSizeWidget{
   const AppBarFullWidget({Key? key}) : super(key: key);
@@ -90,8 +91,8 @@ class AppBardMoreButtonWidget extends StatelessWidget {
               elevation: 0,
               onSelected: (item) {
                 switch (item) {
-                  case MoreSettingsMenuItem.backup : Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BackupScreen())); break;
-                  case MoreSettingsMenuItem.settings : Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen())); break;
+                  case MoreSettingsMenuItem.backup : Navigator.of(context).pushNamed(backupPage); break;
+                  case MoreSettingsMenuItem.settings : Navigator.of(context).pushNamed(settingsPage); break;
                 }
               },
               itemBuilder: (context) {

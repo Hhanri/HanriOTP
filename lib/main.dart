@@ -4,6 +4,7 @@ import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/pages/pin_code_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/route_generator.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,8 @@ class _MyAppState extends ConsumerState<MyApp> {
     print("my app was rebuilt");
     return MaterialApp(
       title: SystemStrings.appTitle,
+      onGenerateRoute: RouteGenerator.generateRoute,
+      initialRoute: "/",
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
