@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:otp_generator/dialogs/decrypt_type_in_password_dialog.dart';
 import 'package:otp_generator/dialogs/encrypt_type_in_password_dialog.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/utils/file_utils.dart';
+import 'package:otp_generator/utils/snackbar_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -45,7 +47,7 @@ class BackupSettingsModel {
     description: BackupSettingsModelStrings.importClearBackupDescription,
     function: (context, ref) {
       print("import backup");
-      importClearFile(context, ref, false);
+      importClearFile(context, ref);
     }
   );
 
@@ -53,7 +55,7 @@ class BackupSettingsModel {
     title: BackupSettingsModelStrings.importEncryptedBackupTitle,
     description: BackupSettingsModelStrings.importEncryptedBackupDescription,
     function: (context, ref) {
-
+      importEncryptedFile(context);
     }
   );
 
@@ -92,9 +94,7 @@ class BackupSettingsModel {
       print(saveFile.path);
       if (!await directory.exists()) {
         await directory.create(recursive: true);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${directory.path}")));
-
-      }
+              }
       if (await directory.exists()) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String content = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
@@ -108,7 +108,7 @@ class BackupSettingsModel {
     }
   }
 
-  static void importClearFile(BuildContext context, WidgetRef ref, bool isEncrypted) async{
+  static void importClearFile(BuildContext context, WidgetRef ref) async{
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"]);
     if (result != null) {
       File file = File(result.files.single.path!);
@@ -117,8 +117,18 @@ class BackupSettingsModel {
         ref.watch(seedsProvider.notifier).importJson(jsonDecode(file.readAsStringSync()), context);
       } catch(e) {
         print(e);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));
+        SnackBarUtils.errorSnackBar(context);
       }
+    }
+  }
+
+  static void importEncryptedFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (result != null && result.files.single.extension == "aes") {
+      File file = File(result.files.single.path!);
+      return DecryptTypeInPasswordDialog.showDecryptTypeInPasswordDialog(context: context, file: file);
+    } else {
+      SnackBarUtils.errorSnackBar(context);
     }
   }
 

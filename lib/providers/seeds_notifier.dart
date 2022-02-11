@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/seed_model.dart';
+import 'package:otp_generator/utils/snackbar_utils.dart';
 
 class SeedsNotifier extends StateNotifier<List<SeedModel>> {
   SeedsNotifier() : super(_initialState);
@@ -30,7 +31,7 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
         SeedModel.saveSeeds(state);
       }
     } catch(e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));
+      SnackBarUtils.errorSnackBar(context);
     }
   }
 

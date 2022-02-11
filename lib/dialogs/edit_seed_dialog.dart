@@ -6,6 +6,7 @@ import 'package:otp_generator/models/algorithm_model.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/app_config.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class EditSeedDialog {
@@ -39,36 +40,41 @@ class EditSeedAlertDialog extends StatelessWidget {
       title: const Text(TitleStrings.addSeed),
       content: Form(
         key: _formKey,
-        child: IntrinsicHeight(
-          child: Column(
-            children: [
-              EditSeedTextFormFieldWidget(
-                field: _title,
-                fieldTitle: TitleStrings.description,
-                valueChanged: (value) {
-                  _title = value;
-                  print(_title);
-                },
-                isBase32: false,
-                initialValue: _title,
+        child: SizedBox(
+          width: AppConfig.screenWidth(context),
+          child: SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  EditSeedTextFormFieldWidget(
+                    field: _title,
+                    fieldTitle: TitleStrings.description,
+                    valueChanged: (value) {
+                      _title = value;
+                      print(_title);
+                    },
+                    isBase32: false,
+                    initialValue: _title,
+                  ),
+                  EditSeedTextFormFieldWidget(
+                    field: _seed,
+                    fieldTitle: TitleStrings.seed,
+                    valueChanged: (value) {
+                      _seed = value;
+                    },
+                    isBase32: true,
+                    initialValue: _seed,
+                  ),
+                  SelectAlgorithmRowWidget(
+                    onChange: (value) {
+                      _algorithm = value;
+                      print(_algorithm);
+                    },
+                    initialAlgo: _algorithm,
+                  )
+                ],
               ),
-              EditSeedTextFormFieldWidget(
-                field: _seed,
-                fieldTitle: TitleStrings.seed,
-                valueChanged: (value) {
-                  _seed = value;
-                },
-                isBase32: true,
-                initialValue: _seed,
-              ),
-              SelectAlgorithmRowWidget(
-                onChange: (value) {
-                  _algorithm = value;
-                  print(_algorithm);
-                },
-                initialAlgo: _algorithm,
-              )
-            ],
+            ),
           ),
         ),
       ),
@@ -113,12 +119,9 @@ class EditSeedTextFormFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(fieldTitle)
-        ),
+        Text(fieldTitle),
         Expanded(
           child: TextFormField(
             initialValue: initialValue,
@@ -163,11 +166,8 @@ class SelectAlgorithmRowWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-              TitleStrings.algorithm
-          )
+        const Text(
+          TitleStrings.algorithm
         ),
         EditAlgorithmDropDownMenuWidget(
           onChange: (value) {

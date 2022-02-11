@@ -40,6 +40,7 @@ class SystemStrings {
   static const String ok = "OK";
   static const String qrCode = "QR Code";
   static const String password = "Password";
+  static const String anErrorHasOccurred = "An Error Has Occurred";
 }
 
 class SettingsMenuModelString {
