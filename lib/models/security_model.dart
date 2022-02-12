@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/utils/khazix.dart';

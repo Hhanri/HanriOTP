@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:otp_generator/dialogs/add_and_edit_seed_dialog.dart';
 import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/utils/route_generator.dart';
 
 class FloatingActionButtonWidget extends StatelessWidget {
   const FloatingActionButtonWidget({
@@ -20,7 +21,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
           child: const Icon(Icons.qr_code_2),
           label: SystemStrings.addFromQRCode,
           onTap: () {
-
+            Navigator.of(context).pushNamed(qrCodeScanPage);
           }
         ),
         SpeedDialChild(

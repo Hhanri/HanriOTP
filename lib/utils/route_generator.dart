@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:otp_generator/pages/backup_page.dart';
 import 'package:otp_generator/pages/home_page.dart';
 import 'package:otp_generator/pages/pin_code_page.dart';
+import 'package:otp_generator/pages/qr_code_scan_page.dart';
 import 'package:otp_generator/pages/settings_page.dart';
 
 class RouteGenerator {
@@ -12,6 +13,7 @@ class RouteGenerator {
       case settingsPage : return MaterialPageRoute(builder: (_) => const SettingsScreen());
       case backupPage : return MaterialPageRoute(builder: (_) => const BackupScreen());
       case pinCodePage : return MaterialPageRoute(builder: (_) => PinCodeScreen());
+      case qrCodeScanPage : return MaterialPageRoute(builder: (_) => const QRCodeScanScreen());
       default : return MaterialPageRoute(builder: (_) => const HomeScreen());
     }
   }
@@ -20,4 +22,5 @@ class RouteGenerator {
 const String homePage = "/HomePage";
 const String settingsPage = "/SettingsPage";
 const String backupPage = "/BackupPage";
-const String pinCodePage = "/PinCode";
+const String pinCodePage = "/PinCodePage";
+const String qrCodeScanPage = "/QRCodeScanPage";

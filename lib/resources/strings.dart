@@ -7,6 +7,9 @@ class SeedModelStrings {
   static const String seed = "seed";
   static const String title = "title";
   static const String algorithm = "algorithm";
+  static const String secret = "secret";
+  static const String scheme = "otpauth";
+  static const String host = "totp";
 }
 
 class BackupSettingsModelStrings {
@@ -26,12 +29,14 @@ class SystemStrings {
   static const String copyToClipBoard = "Copy to clipboard";
   static const String add = "Add";
   static const String wrongCodeFormat = "Wrong Code Format";
+  static const String wrongQRCode = "Wrong QR Code";
   static const String emptyField = "Fill this Field";
   static const String appTitle = "OTP Generator";
   static const String noSeedAdded = "Add Your Seeds !";
   static const String delete = "Delete";
   static const String edit = "Edit";
   static const String showQRCode = "Show QR Code";
+  static const String scanQRCode = "Scan QR Code";
   static const String save = "Save";
   static const String passwordsNotMatching = "Passwords are not matching";
   static const String enterYourPINCode = "Enter your PIN Code";

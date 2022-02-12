@@ -41,6 +41,7 @@ dependencies:
   encrypt: ^5.0.1
   aes_crypt_null_safe: ^2.0.2
   flutter_speed_dial: ^5.0.0+1
+  qr_code_scanner: ^0.6.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
