@@ -11,6 +11,8 @@ class SeedModel extends Equatable{
   final Algorithm algorithm;
   const SeedModel({required this.seed, required this.title, required this.algorithm});
 
+  static const emptySeedModel = SeedModel(seed: "", title: "", algorithm: Algorithm.SHA1);
+
   static Map<String, dynamic> toMap(SeedModel seedModel) => {
     SeedModelStrings.seed: seedModel.seed,
     SeedModelStrings.title: seedModel.title,

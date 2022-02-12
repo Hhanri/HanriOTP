@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/more_settings_model.dart';
-import 'package:otp_generator/pages/backup_page.dart';
-import 'package:otp_generator/pages/settings_page.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/providers/search_seed_notifier.dart';
 import 'package:otp_generator/resources/strings.dart';

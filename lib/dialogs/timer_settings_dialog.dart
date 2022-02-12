@@ -9,7 +9,7 @@ import 'package:otp_generator/providers/providers.dart';
 
 class TimerSettingsDialog {
   static void showTimerSettingsDialog({required BuildContext context, required int selectedTimer}) {
-    FocusScope.of(context).unfocus();
+    //FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       barrierDismissible: true,

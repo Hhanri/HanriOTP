@@ -41,6 +41,7 @@ class SystemStrings {
   static const String qrCode = "QR Code";
   static const String password = "Password";
   static const String anErrorHasOccurred = "An Error Has Occurred";
+  static const String alreadyExists = "This Seed Already Exists";
 }
 
 class SettingsMenuModelString {
@@ -59,6 +60,7 @@ class TitleStrings {
   static const String seed = "Seed";
   static const String description = "Description";
   static const String addSeed = "Add a Seed";
+  static const String editSeed = "Edit a Seed";
   static const String searchSeed = "Search a Seed";
   static const String algorithm = "Algorithm";
   static const String security = "Security";

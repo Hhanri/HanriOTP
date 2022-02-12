@@ -7,27 +7,29 @@ import 'package:otp_generator/models/seed_model.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/utils/app_config.dart';
+import 'package:otp_generator/utils/snackbar_utils.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
 
-class EditSeedDialog {
-
-  static void showEditSeedDialog({required BuildContext context, required SeedModel previousSeed}) {
+class AddAndEditSeedDialog {
+  static void showAddAndEditSeedDialog({required BuildContext context, required SeedModel previousSeed, required bool adding}) {
     FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) {
-        return EditSeedAlertDialog(previousSeed: previousSeed,);
+        return AddAndEditSeedAlertDialog(previousSeed: previousSeed, adding: adding,);
       },
     );
   }
 }
 
-class EditSeedAlertDialog extends StatelessWidget {
+class AddAndEditSeedAlertDialog extends StatelessWidget {
   final SeedModel previousSeed;
-  const EditSeedAlertDialog({
+  final bool adding;
+  const AddAndEditSeedAlertDialog({
     Key? key,
-    required this.previousSeed
+    required this.previousSeed,
+    required this.adding
   }) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class EditSeedAlertDialog extends StatelessWidget {
     String _title = Uri.decodeQueryComponent(previousSeed.title);
     Algorithm _algorithm = previousSeed.algorithm;
     return AlertDialog(
-      title: const Text(TitleStrings.addSeed),
+      title: Text(adding ? TitleStrings.addSeed : TitleStrings.editSeed),
       content: Form(
         key: _formKey,
         child: SizedBox(
@@ -46,7 +48,7 @@ class EditSeedAlertDialog extends StatelessWidget {
             child: IntrinsicHeight(
               child: Column(
                 children: [
-                  EditSeedTextFormFieldWidget(
+                  AddAndEditSeedTextFormFieldWidget(
                     field: _title,
                     fieldTitle: TitleStrings.description,
                     valueChanged: (value) {
@@ -56,7 +58,7 @@ class EditSeedAlertDialog extends StatelessWidget {
                     isBase32: false,
                     initialValue: _title,
                   ),
-                  EditSeedTextFormFieldWidget(
+                  AddAndEditSeedTextFormFieldWidget(
                     field: _seed,
                     fieldTitle: TitleStrings.seed,
                     valueChanged: (value) {
@@ -82,11 +84,20 @@ class EditSeedAlertDialog extends StatelessWidget {
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             return ValidateButtonWidget(
-              text: SystemStrings.edit,
+              text: adding ? SystemStrings.add : SystemStrings.edit,
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, $_algorithm");
-                  ref.watch(seedsProvider.notifier).editSeed(previousSeed, SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm));
+                  final SeedModel newSeed = SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm);
+                  if (!ref.watch(seedsProvider).contains(newSeed)) {
+                    if (adding) {
+                      ref.watch(seedsProvider.notifier).addSeed(newSeed);
+                    } else {
+                      ref.watch(seedsProvider.notifier).editSeed(previousSeed, newSeed);
+                    }
+                  } else {
+                    SnackBarUtils.alreadyExistsSnackBar(context);
+                  }
                   _seed = "";
                   _title = "";
                   Navigator.of(context).pop();
@@ -100,13 +111,13 @@ class EditSeedAlertDialog extends StatelessWidget {
   }
 }
 
-class EditSeedTextFormFieldWidget extends StatelessWidget {
+class AddAndEditSeedTextFormFieldWidget extends StatelessWidget {
   String field;
   final String fieldTitle;
   final ValueChanged valueChanged;
   final bool isBase32;
   final String initialValue;
-  EditSeedTextFormFieldWidget({
+  AddAndEditSeedTextFormFieldWidget({
     Key? key,
     required this.field,
     required this.fieldTitle,
@@ -169,7 +180,7 @@ class SelectAlgorithmRowWidget extends StatelessWidget {
         const Text(
           TitleStrings.algorithm
         ),
-        EditAlgorithmDropDownMenuWidget(
+        AlgorithmDropDownMenuWidget(
           onChange: (value) {
             onChange(value);
           },
@@ -181,20 +192,20 @@ class SelectAlgorithmRowWidget extends StatelessWidget {
 }
 
 
-class EditAlgorithmDropDownMenuWidget extends StatefulWidget {
+class AlgorithmDropDownMenuWidget extends StatefulWidget {
   final Algorithm initialAlgo;
   final Function(Algorithm) onChange;
-  const EditAlgorithmDropDownMenuWidget({
+  const AlgorithmDropDownMenuWidget({
     Key? key,
     required this.onChange,
     required this.initialAlgo,
   }) : super(key: key);
 
   @override
-  State<EditAlgorithmDropDownMenuWidget> createState() => _EditAlgorithmDropDownMenuWidgetState();
+  State<AlgorithmDropDownMenuWidget> createState() => _AlgorithmDropDownMenuWidgetState();
 }
 
-class _EditAlgorithmDropDownMenuWidgetState extends State<EditAlgorithmDropDownMenuWidget> {
+class _AlgorithmDropDownMenuWidgetState extends State<AlgorithmDropDownMenuWidget> {
   Algorithm? _selectedAlgo;
   @override
   Widget build(BuildContext context) {
