@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 class PinCodeDialog {
 
   static void showPinCodeDialog({required BuildContext context}) {
+    FocusScope.of(context).unfocus();
     showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -32,9 +33,10 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
   SecurityPinCodeModel selectedValue = SecurityPinCodeModel.noneModel;
   String password = "";
   String confirmedPassword = "";
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
     return AlertDialog(
       title: const Text(TitleStrings.security),
       content: Form(

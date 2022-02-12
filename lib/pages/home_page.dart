@@ -9,7 +9,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("home was rebuilt");
-    FocusScope.of(context).requestFocus();
     return const SafeArea(
       child: Scaffold(
         appBar: AppBarFullWidget(),

@@ -31,10 +31,9 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
     required this.previousSeed,
     required this.adding
   }) : super(key: key);
-
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     String _seed = previousSeed.seed;
     String _title = Uri.decodeQueryComponent(previousSeed.title);
     Algorithm _algorithm = previousSeed.algorithm;
@@ -89,6 +88,9 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                 if (_formKey.currentState!.validate()) {
                   print("Seed: $_seed, description: $_title, $_algorithm");
                   final SeedModel newSeed = SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm);
+                  _seed = "";
+                  _title = "";
+                  Navigator.of(context).pop();
                   if (!ref.watch(seedsProvider).contains(newSeed)) {
                     if (adding) {
                       ref.watch(seedsProvider.notifier).addSeed(newSeed);
@@ -98,9 +100,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                   } else {
                     SnackBarUtils.alreadyExistsSnackBar(context);
                   }
-                  _seed = "";
-                  _title = "";
-                  Navigator.of(context).pop();
                 }
               },
             );
