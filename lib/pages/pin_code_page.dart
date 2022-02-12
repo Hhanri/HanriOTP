@@ -6,6 +6,7 @@ import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/utils/khazix.dart';
 import 'package:otp_generator/utils/route_generator.dart';
+import 'package:otp_generator/widgets/simple_app_bar_widget.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class PinCodeScreen extends StatelessWidget {
@@ -16,9 +17,7 @@ class PinCodeScreen extends StatelessWidget {
     final FocusNode _focusNode = FocusNode();
     _focusNode.requestFocus();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(SystemStrings.appTitle),
-      ),
+      appBar: const SimpleAppBarWidget(title: SystemStrings.appTitle,),
       body: Center(
         child: SingleChildScrollView(
           child: Row(

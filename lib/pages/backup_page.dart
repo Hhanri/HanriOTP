@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otp_generator/models/backup_settings_model.dart';
 import 'package:otp_generator/resources/strings.dart';
+import 'package:otp_generator/widgets/simple_app_bar_widget.dart';
 
 class BackupScreen extends StatelessWidget {
   const BackupScreen({Key? key}) : super(key: key);
@@ -9,9 +10,7 @@ class BackupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(SystemStrings.backup),
-      ),
+      appBar: const SimpleAppBarWidget(title: SystemStrings.backup,),
       body: BackupSettingsBody(
         clearBackupItems: BackupSettingsModel.clearBackupItems,
         encryptedBackupItems: BackupSettingsModel.encryptedBackupItems,
