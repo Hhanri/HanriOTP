@@ -42,6 +42,8 @@ class SystemStrings {
   static const String password = "Password";
   static const String anErrorHasOccurred = "An Error Has Occurred";
   static const String alreadyExists = "This Seed Already Exists";
+  static const String addManually = "Add Manually";
+  static const String addFromQRCode = "Add From QR Code";
 }
 
 class SettingsMenuModelString {
