@@ -9,7 +9,7 @@
 * [Project Status](#project-status)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
-<!-- * [License](#license) -->
+* [License](#license)
 
 
 ## General Information
@@ -46,4 +46,4 @@ Created by [@Hhanri] - feel free to contact me!
 - Discord: @ハンリ#3182
 
 ## License
-<!-- This project is open source and available under the [... License](). -->
+This project is open source and available under the [GNU AGPLv3 License](https://github.com/Hhanri/otp_generator/blob/main/LICENSE.txt).
