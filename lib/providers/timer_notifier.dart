@@ -23,9 +23,8 @@ class TimerNotifier extends StateNotifier<TimerModel>{
     _tickerSubscription?.cancel();
     _tickerSubscription =
       _ticker.tick(timer).listen((duration) {
-        state = TimerModel(timeLeft: duration, timer: timer);
+        state = TimerModel(timeLeft: Ticker.getRemainingTime(timer), timer: timer);
       });
-    state = TimerModel(timer: timer, timeLeft: Ticker.getRemainingTime(timer));
   }
 
   void changeTimer(int newTimer) async {
