@@ -48,7 +48,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
               child: Column(
                 children: [
                   AddAndEditSeedTextFormFieldWidget(
-                    field: _title,
                     fieldTitle: TitleStrings.description,
                     valueChanged: (value) {
                       _title = value;
@@ -58,7 +57,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                     initialValue: _title,
                   ),
                   AddAndEditSeedTextFormFieldWidget(
-                    field: _seed,
                     fieldTitle: TitleStrings.seed,
                     valueChanged: (value) {
                       _seed = value;
@@ -111,14 +109,12 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
 }
 
 class AddAndEditSeedTextFormFieldWidget extends StatelessWidget {
-  String field;
   final String fieldTitle;
   final ValueChanged valueChanged;
   final bool isBase32;
   final String initialValue;
   AddAndEditSeedTextFormFieldWidget({
     Key? key,
-    required this.field,
     required this.fieldTitle,
     required this.valueChanged,
     required this.isBase32,
