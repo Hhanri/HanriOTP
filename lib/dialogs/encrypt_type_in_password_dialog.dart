@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:aes_crypt_null_safe/aes_crypt_null_safe.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
 import 'package:otp_generator/utils/file_utils.dart';
 import 'package:otp_generator/utils/snackbar_utils.dart';
 import 'package:otp_generator/widgets/validate_button_widget.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EncryptTypeInPasswordDialog {
@@ -57,13 +55,12 @@ class EncryptTypeInPasswordAlertDialog extends StatelessWidget {
     final AesCrypt crypt = AesCrypt();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     crypt.setPassword(password);
-    final Directory? directory = await getExternalStorageDirectory();
 
     String file = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
     String date = FileUtils.getDateFormatFileName();
-    String fileName = "${directory!.path}$date${FileUtils.jsonExt}${FileUtils.aesExt}";
+    String fileName = "${FileUtils.rootPath}$date${FileUtils.jsonExt}${FileUtils.aesExt}";
     crypt.encryptTextToFileSync(file, fileName, utf16: true);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${directory.path}")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${FileUtils.rootPath}")));
   }
 }
 

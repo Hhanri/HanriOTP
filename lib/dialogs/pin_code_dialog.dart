@@ -18,7 +18,6 @@ class PinCodeDialog {
       }
     );
   }
-
 }
 
 class PinCodeAlertDialog extends ConsumerStatefulWidget {
@@ -33,10 +32,9 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
   SecurityPinCodeModel selectedValue = SecurityPinCodeModel.noneModel;
   String password = "";
   String confirmedPassword = "";
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return AlertDialog(
       title: const Text(TitleStrings.security),
       content: Form(

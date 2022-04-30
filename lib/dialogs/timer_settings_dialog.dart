@@ -61,7 +61,6 @@ class _TimerSettingsAlertDialogState extends ConsumerState<TimerSettingsAlertDia
                     },
                   );
                 }),
-
               ],
             ),
           ),

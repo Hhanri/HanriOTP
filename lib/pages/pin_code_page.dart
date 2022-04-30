@@ -11,9 +11,9 @@ import 'package:otp_generator/widgets/validate_button_widget.dart';
 
 class PinCodeScreen extends StatelessWidget {
   PinCodeScreen({Key? key}) : super(key: key);
-  String password = "";
   @override
   Widget build(BuildContext context) {
+    String password = "";
     final FocusNode _focusNode = FocusNode();
     _focusNode.requestFocus();
     return Scaffold(

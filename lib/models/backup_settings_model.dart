@@ -6,7 +6,6 @@ import 'package:otp_generator/dialogs/encrypt_type_in_password_dialog.dart';
 import 'package:otp_generator/providers/providers.dart';
 import 'package:otp_generator/utils/file_utils.dart';
 import 'package:otp_generator/utils/snackbar_utils.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -83,8 +82,8 @@ class BackupSettingsModel {
     Directory? directory;
     try{
       if (Platform.isAndroid) {
-        if (await _requestPermission(Permission.manageExternalStorage)) {
-          directory = await getExternalStorageDirectory();
+        if (await _requestPermission(Permission.storage)) {
+          directory = Directory(FileUtils.rootPath);
         }
       }
       File saveFile = File(directory!.path + "$fileName");
@@ -94,8 +93,8 @@ class BackupSettingsModel {
       if (await directory.exists()) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String content = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
-        saveFile.create(recursive: true);
-        saveFile.writeAsStringSync(content);
+        print(saveFile.absolute);
+        saveFile.writeAsStringSync(content, flush: true);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${directory.path}")));
       }
       return false;
@@ -105,8 +104,7 @@ class BackupSettingsModel {
   }
 
   static void importClearFile(BuildContext context, WidgetRef ref) async {
-    final Directory? initialDirectory = await getExternalStorageDirectory();
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"], initialDirectory: initialDirectory!.path);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ["json"], initialDirectory: FileUtils.rootPath);
     if (result != null) {
       File file = File(result.files.single.path!);
       try {
@@ -118,8 +116,7 @@ class BackupSettingsModel {
   }
 
   static void importEncryptedFile(BuildContext context) async {
-    final Directory? initialDirectory = await getExternalStorageDirectory();
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, initialDirectory: initialDirectory!.path);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, initialDirectory: FileUtils.rootPath);
     if (result != null && result.files.single.extension == "aes") {
       File file = File(result.files.single.path!);
       return DecryptTypeInPasswordDialog.showDecryptTypeInPasswordDialog(context: context, file: file);
@@ -129,7 +126,7 @@ class BackupSettingsModel {
   }
 
   static void exportEncryptedFile(BuildContext context) async{
-    if (await _requestPermission(Permission.manageExternalStorage)) {
+    if (await _requestPermission(Permission.storage)) {
       return EncryptTypeInPasswordDialog.showEncryptTypeInPasswordDialog(context: context);
     }
   }
