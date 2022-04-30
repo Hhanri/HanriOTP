@@ -48,8 +48,6 @@ class PinCodeScreen extends StatelessWidget {
                               text: TitleStrings.unlock,
                               onValidate: () {
                                 if (password == Khazix.decryptPin(encrypt.Encrypted.from64(khazix))) {
-                                  print("ecrypted: $khazix");
-                                  print("decrypted: ${Khazix.decryptPin(encrypt.Encrypted.from64(khazix))}");
                                   Navigator.of(context).pushReplacementNamed(homePage);
                                 } else {
                                   SystemNavigator.pop();
