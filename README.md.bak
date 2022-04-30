@@ -23,7 +23,7 @@
 - Add and edit seeds
 - Add manually
 - Add from QR Code
-- 3 encryption methods (SHA1, SHA128, SHA256)
+- 3 algorithms (SHA1, SHA128, SHA256)
 - Pin Code App Locker
 - Import and Export Clear Backup
 - Import and Export Encrypted Backup
