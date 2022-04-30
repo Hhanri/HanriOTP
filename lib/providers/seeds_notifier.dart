@@ -11,7 +11,6 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
 
   void loadInitialState() async{
     state = await SeedModel.loadSavedSeeds();
-    print(state);
   }
 
   void addSeed(SeedModel newSeed) {
@@ -49,7 +48,6 @@ class SeedsNotifier extends StateNotifier<List<SeedModel>> {
     temporaryState.insert(index, seed);
     state = temporaryState;
     SeedModel.saveSeeds(state);
-    printSeeds();
   }
 
   void removeSeed(SeedModel seed) {

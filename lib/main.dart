@@ -36,7 +36,6 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print("my app was rebuilt");
     return MaterialApp(
       title: SystemStrings.appTitle,
       onGenerateRoute: RouteGenerator.generateRoute,

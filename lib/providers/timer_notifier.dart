@@ -15,7 +15,6 @@ class TimerNotifier extends StateNotifier<TimerModel>{
   void start()async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final int timer = prefs.getInt(SharedPreferencesStrings.savedTimer) ?? 30;
-    print(timer);
     _startTimer(timer);
   }
 

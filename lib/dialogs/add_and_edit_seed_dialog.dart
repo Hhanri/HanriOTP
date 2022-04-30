@@ -51,7 +51,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                     fieldTitle: TitleStrings.description,
                     valueChanged: (value) {
                       _title = value;
-                      print(_title);
                     },
                     isBase32: false,
                     initialValue: _title,
@@ -67,7 +66,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                   SelectAlgorithmRowWidget(
                     onChange: (value) {
                       _algorithm = value;
-                      print(_algorithm);
                     },
                     initialAlgo: _algorithm,
                   )
@@ -84,7 +82,6 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
               text: adding ? SystemStrings.add : SystemStrings.edit,
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
-                  print("Seed: $_seed, description: $_title, $_algorithm");
                   final SeedModel newSeed = SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm);
                   _seed = "";
                   _title = "";
@@ -204,7 +201,6 @@ class _AlgorithmDropDownMenuWidgetState extends State<AlgorithmDropDownMenuWidge
   Algorithm? _selectedAlgo;
   @override
   Widget build(BuildContext context) {
-    print("dropdown menu rebuilt");
     return DropdownButton<Algorithm>(
       elevation: 0,
       alignment: Alignment.centerRight,

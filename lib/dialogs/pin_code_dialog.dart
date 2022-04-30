@@ -101,7 +101,6 @@ class _PinCodeAlertDialogState extends ConsumerState<PinCodeAlertDialog> {
                   Navigator.of(context).pop();
                 } else if (selectedValue == SecurityPinCodeModel.pinCodeModel) {
                   if (_formKey.currentState!.validate() && password.isNotEmpty && confirmedPassword.isNotEmpty) {
-                    print(selectedValue);
                     ref.watch(pinCodeProvider.notifier).changePassword(password);
                     Navigator.of(context).pop();
                   }
