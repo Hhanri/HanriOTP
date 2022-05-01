@@ -34,57 +34,49 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    String _seed = previousSeed.seed;
-    String _title = Uri.decodeQueryComponent(previousSeed.title);
+    TextEditingController _seedController = TextEditingController()..text = previousSeed.seed;
+    TextEditingController _titleController = TextEditingController()..text = Uri.decodeQueryComponent(previousSeed.title);
     Algorithm _algorithm = previousSeed.algorithm;
-    return AlertDialog(
-      title: Text(adding ? TitleStrings.addSeed : TitleStrings.editSeed),
-      content: Form(
-        key: _formKey,
-        child: SizedBox(
-          width: AppConfig.screenWidth(context),
-          child: SingleChildScrollView(
-            child: IntrinsicHeight(
-              child: Column(
-                children: [
-                  AddAndEditSeedTextFormFieldWidget(
-                    fieldTitle: TitleStrings.description,
-                    valueChanged: (value) {
-                      _title = value;
-                    },
-                    isBase32: false,
-                    initialValue: _title,
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        return AlertDialog(
+          title: Text(adding ? TitleStrings.addSeed : TitleStrings.editSeed),
+          content: Form(
+            key: _formKey,
+            child: SizedBox(
+              width: AppConfig.screenWidth(context),
+              child: SingleChildScrollView(
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      AddAndEditSeedTextFormFieldWidget(
+                        controller: _titleController,
+                        fieldTitle: TitleStrings.description,
+                        isBase32: false,
+                      ),
+                      AddAndEditSeedTextFormFieldWidget(
+                        controller: _seedController,
+                        fieldTitle: TitleStrings.seed,
+                        isBase32: true,
+                      ),
+                      SelectAlgorithmRowWidget(
+                        onChange: (value) {
+                          _algorithm = value;
+                        },
+                        initialAlgo: _algorithm,
+                      )
+                    ],
                   ),
-                  AddAndEditSeedTextFormFieldWidget(
-                    fieldTitle: TitleStrings.seed,
-                    valueChanged: (value) {
-                      _seed = value;
-                    },
-                    isBase32: true,
-                    initialValue: _seed,
-                  ),
-                  SelectAlgorithmRowWidget(
-                    onChange: (value) {
-                      _algorithm = value;
-                    },
-                    initialAlgo: _algorithm,
-                  )
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      actions: [
-        Consumer(
-          builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            return ValidateButtonWidget(
+          actions: [
+            ValidateButtonWidget(
               text: adding ? SystemStrings.add : SystemStrings.edit,
               onValidate: () {
                 if (_formKey.currentState!.validate()) {
-                  final SeedModel newSeed = SeedModel(seed: _seed, title: Uri.encodeQueryComponent(_title), algorithm: _algorithm);
-                  _seed = "";
-                  _title = "";
+                  final SeedModel newSeed = SeedModel(seed: _seedController.text, title: Uri.encodeQueryComponent(_titleController.text), algorithm: _algorithm);
                   Navigator.of(context).pop();
                   if (!ref.watch(seedsProvider).contains(newSeed)) {
                     if (adding) {
@@ -97,25 +89,23 @@ class AddAndEditSeedAlertDialog extends StatelessWidget {
                   }
                 }
               },
-            );
-          }
-        )
-      ],
+            )
+          ],
+        );
+      }
     );
   }
 }
 
 class AddAndEditSeedTextFormFieldWidget extends StatelessWidget {
+  final TextEditingController controller;
   final String fieldTitle;
-  final ValueChanged valueChanged;
   final bool isBase32;
-  final String initialValue;
   AddAndEditSeedTextFormFieldWidget({
     Key? key,
     required this.fieldTitle,
-    required this.valueChanged,
     required this.isBase32,
-    required this.initialValue,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -127,11 +117,8 @@ class AddAndEditSeedTextFormFieldWidget extends StatelessWidget {
         Text(fieldTitle),
         Expanded(
           child: TextFormField(
-            initialValue: initialValue,
+            controller: controller,
             textAlign: TextAlign.end,
-            onChanged: (value) {
-              valueChanged(value);
-            },
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return SystemStrings.emptyField;
@@ -198,19 +185,24 @@ class AlgorithmDropDownMenuWidget extends StatefulWidget {
 }
 
 class _AlgorithmDropDownMenuWidgetState extends State<AlgorithmDropDownMenuWidget> {
-  Algorithm? _selectedAlgo;
+  late Algorithm _selectedAlgo;
+  @override
+  void initState() {
+    _selectedAlgo = widget.initialAlgo;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Algorithm>(
       elevation: 0,
       alignment: Alignment.centerRight,
       items: AlgorithmModel.algorithms.map(buildItem).toList(),
-      value: _selectedAlgo ?? widget.initialAlgo,
+      value: _selectedAlgo,
       onChanged: (value) {
-        widget.onChange(value ?? AlgorithmModel.defaultAlgo);
         setState(() {
-          _selectedAlgo = value;
+          _selectedAlgo = value!;
         });
+        widget.onChange(_selectedAlgo);
       },
     );
   }
