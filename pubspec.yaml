@@ -39,7 +39,7 @@ dependencies:
   qr_flutter: ^4.0.0
   encrypt: ^5.0.1
   aes_crypt_null_safe: ^2.0.2
-  flutter_speed_dial: ^5.1.0
+  flutter_speed_dial: ^6.0.0
   qr_code_scanner: ^0.7.0
 
   # The following adds the Cupertino Icons font to your application.
