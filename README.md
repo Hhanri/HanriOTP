@@ -13,8 +13,10 @@
 
 
 ## General Information
-- HanriOTP is a very simple OTP generator application, it doesn't do anything superficial, just straight to the point.
-- This app was made to replace any OTP application such as Google's with a light weight, optimized app and that doesn't need to connect to the internet.
+- HanriOTP is a One Time Password (OTP) generator application for 2 Factor Authentication (2FA) that I made as one of my main Portfolio app with Flutter, it was made to replace any OTP application such as Google's with a light weight, optimized app and that doesn't need to connect to the internet. In sum it is a very simple OTP generator app, it doesn't do anything superficial, just straight to the point.
+- You can simply add your seeds manually or using a QR Code
+- Export your backup wether it is a clear json file or an encrypted json file to the directory /storage/emulated/0/HanriOTP/
+- Import your backup from wherever it is in your phone
 
 ## Technologies Used
 - Flutter 2.10
@@ -36,6 +38,7 @@
 
 ## Project Status
 Project is: complete
+The project is still maintained to fix any bug that can occur in the future
 
 ## Acknowledgements
 - This project was inspired by https://github.com/andOTP/andOTP
