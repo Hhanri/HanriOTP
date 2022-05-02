@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:aes_crypt_null_safe/aes_crypt_null_safe.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_generator/resources/strings.dart';
@@ -53,14 +54,21 @@ class EncryptTypeInPasswordAlertDialog extends StatelessWidget {
 
   void exportEncryptedFile(String password, BuildContext context) async {
     final AesCrypt crypt = AesCrypt();
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     crypt.setPassword(password);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String file = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
-    String date = FileUtils.getDateFormatFileName();
-    String fileName = "${FileUtils.rootPath}$date${FileUtils.jsonExt}${FileUtils.aesExt}";
-    crypt.encryptTextToFileSync(file, fileName, utf16: true);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${FileUtils.rootPath}")));
+    String fileContent = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
+    String fileName = "${FileUtils.rootPath}${FileUtils.getDateFormatFileName()}${FileUtils.jsonExt}${FileUtils.aesExt}";
+
+    Directory directory = Directory(FileUtils.rootPath);;
+
+    if (!await directory.exists()) {
+      await directory.create(recursive: true);
+    }
+    if (await directory.exists()) {
+      crypt.encryptTextToFileSync(fileContent, fileName, utf16: true);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${FileUtils.rootPath}")));
+    }
   }
 }
 

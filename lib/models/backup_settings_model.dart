@@ -82,7 +82,7 @@ class BackupSettingsModel {
     Directory? directory;
     try{
       if (Platform.isAndroid) {
-        if (await _requestPermission(Permission.storage)) {
+        if (await _requestPermission(Permission.storage) && await _requestPermission(Permission.manageExternalStorage)) {
           directory = Directory(FileUtils.rootPath);
         }
       }
@@ -93,7 +93,6 @@ class BackupSettingsModel {
       if (await directory.exists()) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String content = jsonEncode(prefs.getStringList(SharedPreferencesStrings.savedSeeds));
-        print(saveFile.absolute);
         saveFile.writeAsStringSync(content, flush: true);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("saved to ${directory.path}")));
       }
@@ -126,7 +125,7 @@ class BackupSettingsModel {
   }
 
   static void exportEncryptedFile(BuildContext context) async{
-    if (await _requestPermission(Permission.storage)) {
+    if (await _requestPermission(Permission.storage) && await _requestPermission(Permission.manageExternalStorage)) {
       return EncryptTypeInPasswordDialog.showEncryptTypeInPasswordDialog(context: context);
     }
   }
