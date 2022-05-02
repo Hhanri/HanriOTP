@@ -4,6 +4,7 @@
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
+* [Plugins Used](#plugin-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Project Status](#project-status)
@@ -20,6 +21,19 @@
 
 ## Technologies Used
 - Flutter 2.10
+
+## Plugins Used
+- 'otp' to generate OTP codes
+- 'flutter_riverpod' to manage the state of the app
+- 'shared_preferences' to store user's data locally
+- 'permission_handler' to request storage permission
+- 'intl' to format timestamp strings
+- 'file_picker' to import files from local storage into the app
+- 'qr_flutter' to generate QR Codes for seeds
+- 'encrypt' to encrypt the app's pin code
+- 'aes_crypt_null_safe' to encrypt backup files
+- 'flutter_speed_dial' for easy multi floating action button
+- 'qr_code_scanner' to scan QR Codes
 
 ## Features
 - Add and edit seeds
